@@ -1,6 +1,6 @@
 <?php
-    include_once "data/Comment.php";
-    include_once "database/DatabaseFactory.php";
+    include_once "../data/Comment.php";
+    include_once "DatabaseFactory.php";
 
     //Class that contains CRUD methods for Comments, does not contain any data, only static methods
     class CommentDB
@@ -121,7 +121,7 @@
         }
         
         //Convert function to convert row to Comment
-        protected static function convertRow($row)
+        public static function convertRow($row)
         {
             return new Comment(
                 $row['Id'],

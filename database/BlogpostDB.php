@@ -1,6 +1,6 @@
 <?php
-    include_once "data/Blogpost.php";
-    include_once "database/DatabaseFactory.php";
+    include_once("../data/Blogpost.php");
+    include_once("DatabaseFactory.php");
 
     //Class that contains CRUD methods for Blogposts, does not contain any data, only static methods
     class BlogpostDB

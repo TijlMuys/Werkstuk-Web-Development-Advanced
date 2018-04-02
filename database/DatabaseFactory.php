@@ -1,5 +1,5 @@
 <?php
-    include_once 'database/Database.php';
+    include_once 'Database.php';
 
     //Keeps track of the database connection throughout the application, froms a single entrypoint for the database connection
     class DatabaseFactory 

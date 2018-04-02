@@ -1,5 +1,4 @@
 <?php
-    
 
     //This file will initialize the variables below at the begin of the application
     $DBurl = "dt5.ehb.be"; //Database URL

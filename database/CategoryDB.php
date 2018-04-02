@@ -1,9 +1,9 @@
 <?php
-    include_once "data/Blogpost.php";
+    include_once "data/Category.php";
     include_once "database/DatabaseFactory.php";
 
-    //Class that contains CRUD methods for Blogposts, does not contain any data, only static methods
-    class BlogpostDB
+    //Class that contains CRUD methods for Categories, does not contain any data, only static methods
+    class CategoryDB
     {
         //retrieves connection form DatabaseFactory
         private static function getConnection()
@@ -11,11 +11,11 @@
             return DatabaseFactory::getDatabase();
         }
         
-        //Retrieve all Blogposts
+        //Retrieve all categories
         public static function getAll()
         {
             //Prepare query string
-            $query = "SELECT * FROM BLOGPOSTS";
+            $query = "SELECT * FROM CATEGORIES";
             
             //Execute query
             $conn = self::getConnection();
@@ -29,10 +29,10 @@
             {
                 //Request current selected row from resultset as array
                 $row = $result->fetch_array();
-                //Convert row to Blogpost object
-                $blogpost = BlogpostDB::convertRow($row);
+                //Convert row to category object
+                $category = CategoryDB::convertRow($row);
                 //Add blogpost object to resultsArray
-                $resultsArray[$i] = $blogpost;
+                $resultsArray[$i] = $category;
             }
             
             //Return the resultsArray
@@ -40,11 +40,11 @@
             
         }
         
-        //Retrieve single Blogposts
+        //Retrieve single category
         public static function getById($id)
         {
             //Prepare query string
-            $query = "SELECT * FROM BLOGPOSTS WHERE Id = '?'";
+            $query = "SELECT * FROM CATEGORIES WHERE Id = '?'";
             $parameters = array($id);
             
             //Execute query
@@ -57,49 +57,44 @@
             //Request current selected row from resultset as array
             $row = $result->fetch_array();
             
-            //Convert row to Blogpost object
-            $blogpost = BlogpostDB::convertRow($row);
+            //Convert row to category object
+            $category = CategoryDB::convertRow($row);
             
             //Return the object
-            return $blogpost;
+            return $category;
             
         }
         
-        //Insert a Blogpost
-        public static function insert($blogpost)
+        //Insert a category
+        public static function insert($category)
         {
-            $querystring = "INSERT INTO BLOGPOSTS(UserId, CategoryId, Title, Content, ImageUrl) VALUES ('?','?','?','?','?')";
-            $parameters = array($blogpost->UserId, $blogpost->CategoryId, $blogpost->Title, $blogpost->Content, $blogpost->ImageUrl);
+            $querystring = "INSERT INTO CATEGORIES(CategoryName) VALUES ('?')";
+            $parameters = array($category->CategoryName);
             return self::getConnection()->executeQuery($querystring, $parameters);
         }
         
-         //Update a Blogpost
-        public static function update($blogpost)
+         //Update a category
+        public static function update($category)
         {
-            $querystring = "UPDATE BLOGPOSTS SET UserId = '?', CategoryId = '?', Title ='?', Content = '?', ImageUrl = '?' WHERE Id = '?'";
-            $parameters = array($blogpost->UserId, $blogpost->CategoryId, $blogpost->Title, $blogpost->Content, $blogpost->ImageUrl, $blogpost->Id);
+            $querystring = "UPDATE CATEGORIES SET CategoryName = '?' WHERE Id = '?'";
+            $parameters = array($category->CategoryName, $category->Id);
             return self::getConnection()->executeQuery($querystring, $parameters);
         }
         
-        //Delete a Blogpost
-        public static function delete($blogpost)
+        //Delete a category
+        public static function delete($category)
         {
-            $querystring = "DELETE FROM BLOGPOSTS WHERE Id = '?'";
-            $parameters = array($blogpost->Id);
+            $querystring = "DELETE FROM CATEGORIES WHERE Id = '?'";
+            $parameters = array($category->Id);
             return self::getConnection()->executeQuery($querystring, $parameters);
         }
         
-        //Convert function to convert row to Blogpost
+        //Convert function to convert row to Category
         protected static function convertRow($row)
         {
-            return new BlogPost(
+            return new Category(
                 $row['Id'],
-                $row['UserId'],
-                $row['CategoryId'],
-                $row['Title'],
-                $row['Date'],
-                $row['Content'],
-                $row['ImageUrl']
+                $row['CategoryName']
             );
         }
     }

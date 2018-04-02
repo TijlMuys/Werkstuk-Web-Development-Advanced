@@ -1,5 +1,5 @@
 <?php
-    //Blogpost class with info of a single blogpost fro mthe database
+    //Blogpost class with info of a single blogpost from the database
     class Blogpost
     {
         public $Id;

@@ -1,5 +1,6 @@
 <?php
     //Class that represents the Database connection
+    //Reference to Tutorial
     //Add Reference to tutorial series
     class Database {
         
@@ -29,7 +30,7 @@
             }
         }
         
-        //Method used to connect to database (reference to tutorial)
+        //Method used to connect to database
         protected function makeConnection(){
             //make new connection
             $this->connection = new mysqli($this->url, $this->username, $this->password, $this->database);
@@ -37,6 +38,11 @@
             if ($this->connection->connect_error)
             {
                 echo "Fail:" . $this->connection->connect_error;
+            }
+            else
+            {
+                //If connection successful, turn on autocommit
+                $this->connection->autocommit(TRUE);
             }
         }
         
@@ -64,10 +70,10 @@
         {
             //Check if there is a Database connection
             $this->makeConnection();
-            //Adjust query with params if available
-            
+            //Adjust query with params if available -> if params = DML statement, otherwise SELECT query
             if ($params != null)
             {
+                //DML Statement
                 //Change the ?-marks in querystring to the corresponding values in the params array
                 //split query in parts
                 $queryParts = preg_split("/\?/", $query);
@@ -77,8 +83,7 @@
                     return false;
                 }
                 //Add first part of combined query
-                $finalQuery = queryParts[0];
-
+                $finalQuery = $queryParts[0];
                 
                 //loop over all the parameters
                 for ($i = 0; $i < count($params); $i++)
@@ -91,14 +96,13 @@
             }
             //execute query
             $results = $this->connection->query($query);
-            var_dump($results);
+            //print possible error (results == false)
+            if ($results === FALSE)
+            {
+                 echo $this->connection->error;
+            }
             //return resultset (rows)
             return $results;
         }
-        
-        
-            
-       
- 
     }
 ?>

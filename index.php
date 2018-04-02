@@ -1,8 +1,10 @@
 <?php
     include_once "initialize.php";
     include_once "./database/BlogpostDB.php";
-    $newblogpost = new Blogpost(-1, 1, 3, "Testtitel", -1, "Dit is een dummybericht", "https://imagejournal.org/wp-content/uploads/bb-plugin/cache/23466317216_b99485ba14_o-panorama.jpg");
-    BlogpostDB::insert($newblogpost);
+    include_once "./database/CommentDB.php";
+    //$oldblogpost = BlogpostDB::getById(8);
+    //$oldblogpost->ImageUrl = "https://i0.wp.com/www.tutorialmines.net/wp-content/uploads/2015/11/php-logo.png?fit=224%2C224";
+    //BlogpostDB::delete($oldblogpost);
 ?>
 
 <!DOCTYPE html>
@@ -23,8 +25,10 @@
             <th>Date</th>
             <th>Content</th>
             <th>ImageUrl</th>
+            <th>Number of comments</th>
         </tr>
         <?php
+            //$blogpost = BlogpostDB::getById(3);
             $list = BlogpostDB::getAll();
             foreach ($list as $blogpost) {
         ?>
@@ -36,6 +40,7 @@
             <td><?php echo($blogpost->Date); ?></td>
             <td><?php echo($blogpost->Content); ?></td>
             <td><?php echo($blogpost->ImageUrl); ?></td>
+            <td><?php echo(count(CommentDB::getByBlogpostId($blogpost->Id))); ?></td>
         </tr>
          <?php
             }

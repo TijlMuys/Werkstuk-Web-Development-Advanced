@@ -1,9 +1,9 @@
 <?php
-    include_once "data/Blogpost.php";
+    include_once "data/User.php";
     include_once "database/DatabaseFactory.php";
 
-    //Class that contains CRUD methods for Blogposts, does not contain any data, only static methods
-    class BlogpostDB
+    //Class that contains CRUD methods for Users, does not contain any data, only static methods
+    class UserDB
     {
         //retrieves connection form DatabaseFactory
         private static function getConnection()
@@ -11,11 +11,11 @@
             return DatabaseFactory::getDatabase();
         }
         
-        //Retrieve all Blogposts
+        //Retrieve all Users
         public static function getAll()
         {
             //Prepare query string
-            $query = "SELECT * FROM BLOGPOSTS";
+            $query = "SELECT * FROM USERS";
             
             //Execute query
             $conn = self::getConnection();
@@ -29,10 +29,10 @@
             {
                 //Request current selected row from resultset as array
                 $row = $result->fetch_array();
-                //Convert row to Blogpost object
-                $blogpost = BlogpostDB::convertRow($row);
+                //Convert row to User object
+                $user = UserDB::convertRow($row);
                 //Add blogpost object to resultsArray
-                $resultsArray[$i] = $blogpost;
+                $resultsArray[$i] = $user;
             }
             
             //Return the resultsArray
@@ -40,11 +40,11 @@
             
         }
         
-        //Retrieve single Blogposts
+        //Retrieve single User
         public static function getById($id)
         {
             //Prepare query string
-            $query = "SELECT * FROM BLOGPOSTS WHERE Id = '?'";
+            $query = "SELECT * FROM USERS WHERE Id = '?'";
             $parameters = array($id);
             
             //Execute query
@@ -57,49 +57,47 @@
             //Request current selected row from resultset as array
             $row = $result->fetch_array();
             
-            //Convert row to Blogpost object
-            $blogpost = BlogpostDB::convertRow($row);
+            //Convert row to user object
+            $user = UserDB::convertRow($row);
             
             //Return the object
-            return $blogpost;
+            return $user;
             
         }
         
-        //Insert a Blogpost
-        public static function insert($blogpost)
+        //Insert a User
+        public static function insert($user)
         {
-            $querystring = "INSERT INTO BLOGPOSTS(UserId, CategoryId, Title, Content, ImageUrl) VALUES ('?','?','?','?','?')";
-            $parameters = array($blogpost->UserId, $blogpost->CategoryId, $blogpost->Title, $blogpost->Content, $blogpost->ImageUrl);
+            $querystring = "INSERT INTO USERS(Username, Password, Email, IsAdmin) VALUES ('?','?','?','?')";
+            $parameters = array($user->Username, $user->Password, $user->Email, $user->IsAdmin);
             return self::getConnection()->executeQuery($querystring, $parameters);
         }
         
-         //Update a Blogpost
-        public static function update($blogpost)
+         //Update a User
+        public static function update($user)
         {
-            $querystring = "UPDATE BLOGPOSTS SET UserId = '?', CategoryId = '?', Title ='?', Content = '?', ImageUrl = '?' WHERE Id = '?'";
-            $parameters = array($blogpost->UserId, $blogpost->CategoryId, $blogpost->Title, $blogpost->Content, $blogpost->ImageUrl, $blogpost->Id);
+            $querystring = "UPDATE USERS SET Username = '?', Password = '?', Email ='?', IsAdmin = '?' WHERE Id = '?'";
+            $parameters = array($user->Username, $user->Password, $user->Email, $user->IsAdmin, $user->Id);
             return self::getConnection()->executeQuery($querystring, $parameters);
         }
         
-        //Delete a Blogpost
-        public static function delete($blogpost)
+        //Delete a User
+        public static function delete($user)
         {
-            $querystring = "DELETE FROM BLOGPOSTS WHERE Id = '?'";
-            $parameters = array($blogpost->Id);
+            $querystring = "DELETE FROM USERS WHERE Id = '?'";
+            $parameters = array($user->Id);
             return self::getConnection()->executeQuery($querystring, $parameters);
         }
         
-        //Convert function to convert row to Blogpost
+        //Convert function to convert row to User
         protected static function convertRow($row)
         {
-            return new BlogPost(
+            return new User(
                 $row['Id'],
-                $row['UserId'],
-                $row['CategoryId'],
-                $row['Title'],
-                $row['Date'],
-                $row['Content'],
-                $row['ImageUrl']
+                $row['Username'],
+                $row['Password'],
+                $row['Email'],
+                $row['IsAdmin']
             );
         }
     }

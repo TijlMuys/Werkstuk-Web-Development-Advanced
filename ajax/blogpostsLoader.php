@@ -1,6 +1,7 @@
 <?php
     include_once("../initialize.php");
     include_once("../database/BlogContextQueries.php");
+    //if(TRUE)
     if(isset($_POST["filterinput"]) == TRUE && empty($_POST["filterinput"]) == FALSE)
     {
         $blogposts = BlogContextQueries::getAll();

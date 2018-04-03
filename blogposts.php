@@ -45,13 +45,53 @@
           <h1 class="my-4">Blog Posts
             <small>All Posts</small>
           </h1>
-          <div id="blogposts">
-              
+          
+          <!-- Pagination -->
+          <nav aria-label="Page navigation example">
+              <ul class="pagination" id="paginationtop">
+                <li class="page-item">
+                  <a class="page-link page-link-prev" href="#" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                    <span class="sr-only">Previous</span>
+                  </a>
+                </li>
+                <li class="page-item">
+                  <a class="page-link page-link-next" href="#" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                    <span class="sr-only">Next</span>
+                  </a>
+                </li>
+              </ul>
+            </nav>
+          <!-- Blog post container -->
+          <div id="dynamic-blogposts">
+              <!-- Blog Post -->
+               
+            
           </div>
-          <!-- Blog Post -->
-           <script src="js/blogpostsPage.js"></script>
-          <!--/Blog Post -->
-
+          <!-- Dynamic Blogposts script -->
+          <script src="js/blogpostsPage.js"></script>
+        
+          
+        <!-- Pagination -->
+          <nav aria-label="Page navigation example">
+              <ul class="pagination" id="paginationbottom">
+                <li class="page-item">
+                  <a class="page-link page-link-prev" href="#" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                    <span class="sr-only">Previous</span>
+                  </a>
+                </li>
+                
+                <li class="page-item">
+                  <a class="page-link page-link-next" href="#" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                    <span class="sr-only">Next</span>
+                  </a>
+                </li>
+              </ul>
+            </nav>
+        
         <!--Filter test-->
         <h2>Filter test</h2>
         <form method="post" action="ajax/blogpostsLoader.php" id="form">
@@ -61,17 +101,7 @@
         <div id="data"></div>
        
 
-          <!-- Pagination -->
-          <ul class="pagination justify-content-center mb-4">
-            <li class="page-item">
-              <a class="page-link" href="#">&larr; Older</a>
-            </li>
-            <li class="page-item disabled">
-              <a class="page-link" href="#">Newer &rarr;</a>
-            </li>
-          </ul>
-         <!--/Filter test-->
-         
+        <!-- /Blog Entries Column -->
         </div>
 
         <!-- Sidebar Widgets Column -->

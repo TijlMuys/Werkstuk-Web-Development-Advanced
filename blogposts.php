@@ -6,7 +6,7 @@
     <meta name="description" content="Holmepage of blog">
     <meta name="author" content="Tijl Muys">
 
-    <title>Jumbotron Template for Bootstrap</title>
+    <title>Blog Posts Overview</title>
     <!-- JQuery -->
     <script src="vendor/jquery/jquery-3.3.1.min.js"></script>
     <!-- Bootstrap core CSS -->
@@ -14,7 +14,7 @@
     
 
     <!-- Custom styles for this template -->
-    <link href="css/layout.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/layout.css">
   </head>
 
   <body>
@@ -42,7 +42,7 @@
         <!-- Blog Entries Column -->
         <div class="col-md-8">
 
-          <h1 class="my-4">Blog Posts
+          <h1 id="h1" class="my-4">Blog Posts
             <small>All Posts</small>
           </h1>
           
@@ -106,8 +106,9 @@
 
         <!-- Sidebar Widgets Column -->
         <div class="col-md-4">
+          <div id="affix">
 
-          <!-- Search Widget -->
+          <!-- Search Widget 
           <div class="card my-4">
             <h5 class="card-header">Search</h5>
             <div class="card-body">
@@ -119,52 +120,42 @@
               </div>
             </div>
           </div>
+          -->
 
+         <!-- Popular Widget -->
+          <div class="card my-4">
+            <h4 class="card-header">3 Most Popular Posts</h4>
+            <div class="card-body">
+                <ul class="list-unstyled mb-0 popular-list">
+                 </ul>
+                </div>
+            </div>
+        
+          <hr />
+         
           <!-- Categories Widget -->
           <div class="card my-4">
-            <h5 class="card-header">Categories</h5>
+            <h4 class="card-header">Categories</h4>
             <div class="card-body">
-              <div class="row">
-                <div class="col-lg-6">
-                  <ul class="list-unstyled mb-0">
-                    <li>
-                      <a href="#">Web Design</a>
-                    </li>
-                    <li>
-                      <a href="#">HTML</a>
-                    </li>
-                    <li>
-                      <a href="#">Freebies</a>
-                    </li>
-                  </ul>
+                <ul class="list-unstyled mb-0 categories-list">
+                    
+                 </ul>
                 </div>
-                <div class="col-lg-6">
-                  <ul class="list-unstyled mb-0">
-                    <li>
-                      <a href="#">JavaScript</a>
-                    </li>
-                    <li>
-                      <a href="#">CSS</a>
-                    </li>
-                    <li>
-                      <a href="#">Tutorials</a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
             </div>
-          </div>
-
-          <!-- Side Widget -->
+        
+          <hr />
+          <!-- Archive Widget -->
           <div class="card my-4">
-            <h5 class="card-header">Side Widget</h5>
+            <h4 class="card-header">Archive</h4>
             <div class="card-body">
-              You can put anything you want inside of these side widgets. They are easy to use, and feature the new Bootstrap 4 card containers!
+                <ul class="list-unstyled mb-0 archive-list">
+                    
+                 </ul>
+                </div>
             </div>
-          </div>
 
         </div>
-
+        </div>
       </div>
       <!-- /.row -->
         <hr />

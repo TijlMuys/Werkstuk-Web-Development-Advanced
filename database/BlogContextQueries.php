@@ -19,7 +19,8 @@
             $query = "SELECT b.Id, b.UserId, u.Username, b.CategoryId, c.CategoryName, b.Title, b.Date, b.Content, b.ImageUrl
             FROM BLOGPOSTS b 
             JOIN USERS u ON(b.UserId = u.Id)
-            JOIN CATEGORIES c ON(b.CategoryId = c.Id);";
+            JOIN CATEGORIES c ON(b.CategoryId = c.Id)
+            ORDER BY b.Date DESC;";
             
             //Execute query
             $conn = self::getConnection();
@@ -59,7 +60,7 @@
                       FROM BLOGPOSTS b 
                       JOIN USERS u ON(b.UserId = u.Id)
                       JOIN CATEGORIES c ON(b.CategoryId = c.Id) 
-                      WHERE Id = '?'";
+                      WHERE b.Id = '?'";
             $parameters = array($id);
             
             //Execute query
@@ -78,23 +79,9 @@
             //Get correspônding comments of (partial) blogcontext
                         //Prepare inner query string
                         $innerquery = CommentDB::getByBlogpostId($blogcontext->Id);
-                        //initiate inner result array
-                         $innerresultsArray = array();
-                        //preform inner query
-                        $innerresult = $conn->executeQuery($query);
-                        //iterate over inner resultset
-                        for($j = 0; $j < $innerresult->num_rows; $j++)
-                        {
-                            //Request current selected row from inner resultset as array
-                            $innerrow = $innerresult->fetch_array();
-                            //Convert inner row to inner comment object
-                            $innercomment = CommentDB::convertRow($innerrow);
-                            //Add inner comment to our inner resultsarray
-                            $innerresultsArray[$j] =  $innercomment;
-
-                        }
-                        //add innerresultsarray to our outer blogcontext
-                        $blogcontext->Comments =  $innerresultsArray;
+                        
+                        //add queryresult as out comment datamemeber
+                        $blogcontext->Comments =  $innerquery;
             
             //Return the object
             return $blogcontext;

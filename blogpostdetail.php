@@ -1,6 +1,5 @@
 <?php
-    $filter = "Politics";
-    
+    $blogpostId = $_GET["Id"];
 ?>
 <!doctype html>
 <html lang="en">
@@ -11,8 +10,8 @@
     <meta name="author" content="Tijl Muys">
 
     <title>Blog Posts Overview</title>
-
-    <!-- Bootstrap core CSS -->
+   
+   <!-- Bootstrap core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <!-- JQuery -->
     <script src="vendor/jquery/jquery-3.3.1.min.js"></script>
@@ -56,67 +55,50 @@
     <div class="container" id="start-content">
 
       <div class="row">
-
-        <!-- Blog Entries Column -->
-        <div class="col-md-8">
-
-          <h1 id="h1" class="my-4">Blog Posts
-            <small>All Posts</small>
-          </h1>
-          
-          <!-- Pagination -->
-          <nav aria-label="Page navigation example">
-              <ul class="pagination" id="paginationtop">
-                <li class="page-item">
-                  <a class="page-link page-link-prev" href="#" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                    <span class="sr-only">Previous</span>
-                  </a>
-                </li>
-                <li class="page-item">
-                  <a class="page-link page-link-next" href="#" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                    <span class="sr-only">Next</span>
-                  </a>
-                </li>
-              </ul>
-            </nav>
-          <!-- Blog post container -->
-          <div id="dynamic-blogposts">
-              <!-- Blog Post -->
-               
-            
+        <!-- Post Content Column -->
+        <div class="col-lg-8">
+         <div id="mainContent">
+          <!-- Title
+          <h1 class="mt-4">Blog Post <?php echo($blogpostId) ?></h1>
+          <p class="lead">
+            by
+            <a href="#">Start Bootstrap</a>
+          </p>
+          <hr>
+          <p>Posted on January 1, 2018 at 12:00 PM</p>
+          <hr>
+          <img class="img-fluid rounded" src="http://placehold.it/900x300" alt="">
+          <hr>
+          <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus, vero, obcaecati, aut, error quam sapiente nemo saepe quibusdam sit excepturi nam quia corporis eligendi eos magni recusandae laborum minus inventore?</p>
+          <hr>-->
           </div>
-          <!-- Dynamic Blogposts script -->
-          <script src="js/blogpostsPage.js"></script>
-        
-          
-        <!-- Pagination -->
-          <nav aria-label="Page navigation example">
-              <ul class="pagination" id="paginationbottom">
-                <li class="page-item">
-                  <a class="page-link page-link-prev" href="#" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                    <span class="sr-only">Previous</span>
-                  </a>
-                </li>
-                
-                <li class="page-item">
-                  <a class="page-link page-link-next" href="#" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                    <span class="sr-only">Next</span>
-                  </a>
-                </li>
-              </ul>
-            </nav>
+          <!-- Comments Form -->
+          <div class="card my-4">
+            <h5 class="card-header">Leave a Comment:</h5>
+            <div class="card-body">
+              <form>
+                <div class="form-group">
+                  <textarea class="form-control" rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </form>
+            </div>
+          </div>
 
-        <!-- /Blog Entries Column -->
+          <!-- Single Comment -->
+          <div class="media mb-4">
+            <img class="d-flex mr-3 rounded-circle" src="images/chat.png" alt="">
+            <div class="media-body">
+              <h5 class="mt-0">Commenter Name</h5>
+              Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
+            </div>
+            </div>
         </div>
 
         <!-- Sidebar Widgets Column -->
-        <div class="col-md-4" id="affix">
+        <div class="col-md-4">
 
-          <!-- Search Widget 
+          <!-- Search Widget -->
           <div class="card my-4">
             <h5 class="card-header">Search</h5>
             <div class="card-body">
@@ -128,46 +110,59 @@
               </div>
             </div>
           </div>
-          -->
 
-         <!-- Popular Widget -->
-          <div class="card my-4">
-            <h4 class="card-header">3 Most Popular Posts</h4>
-            <div class="card-body">
-                <ul class="list-unstyled mb-0 popular-list">
-                 </ul>
-                </div>
-            </div>
-        
-          <hr />
-         
           <!-- Categories Widget -->
           <div class="card my-4">
-            <h4 class="card-header">Categories</h4>
+            <h5 class="card-header">Categories</h5>
             <div class="card-body">
-                <ul class="list-unstyled mb-0 categories-list">
-                    
-                 </ul>
+              <div class="row">
+                <div class="col-lg-6">
+                  <ul class="list-unstyled mb-0">
+                    <li>
+                      <a href="#">Web Design</a>
+                    </li>
+                    <li>
+                      <a href="#">HTML</a>
+                    </li>
+                    <li>
+                      <a href="#">Freebies</a>
+                    </li>
+                  </ul>
                 </div>
+                <div class="col-lg-6">
+                  <ul class="list-unstyled mb-0">
+                    <li>
+                      <a href="#">JavaScript</a>
+                    </li>
+                    <li>
+                      <a href="#">CSS</a>
+                    </li>
+                    <li>
+                      <a href="#">Tutorials</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </div>
-        
-          <hr />
-          <!-- Archive Widget -->
+          </div>
+
+          <!-- Side Widget -->
           <div class="card my-4">
-            <h4 class="card-header">Archive</h4>
             <div class="card-body">
-                <ul class="list-unstyled mb-0 archive-list">
-                    
-                 </ul>
-                </div>
+              <button type="button" class="btn btn-link"><a href="blogposts.php">Go Back</a></button>
             </div>
+          </div>
 
         </div>
+
       </div>
       <!-- /.row -->
-        <hr />
-      </div> <!-- /container -->
 
+    </div>
+    <!-- /.container -->
+    <script src="js/blogpostsDetailPage.js"></script>
+    
+    
     <footer class="container">
       <p>&copy; Tijl Muys, EhB - 2017-2018</p>
     </footer>

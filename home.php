@@ -7,68 +7,104 @@
     <meta name="author" content="Tijl Muys">
 
     <title>Jumbotron Template for Bootstrap</title>
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <!-- JQuery -->
     <script src="vendor/jquery/jquery-3.3.1.min.js"></script>
-    <!-- Bootstrap core CSS -->
-    <link href="vendor/bootstrap/bootstrap-3.3.7-dist/css/bootstrap.css" rel="stylesheet">
-    
-
+    <!-- Bootstrap JS -->
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- Custom styles for this template -->
-    <link href="css/layout.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/layout.css">
   </head>
 
   <body>
     <!-- Navigation -->
-    <nav class="navbar navbar-inverse navbar-static-top">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <a class="navbar-brand" href="#">MyBlog</a>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="site-navbar">
+      <div class="container">
+        <a class="navbar-brand" href="#">MyBlog</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="home.php">Home
+                <span class="sr-only">(current)</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="blogposts.php">Blogposts</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Login</a>
+            </li>
+          </ul>
         </div>
-        <ul class="nav navbar-nav navbar-center">
-          <li class="active"><a href="home.php">Home</a></li>
-          <li><a href="blogposts.php">Blogposts</a></li>
-          <li><a href="#">About</a></li>
-          <li role="separator" class="divider"></li>
-          <li><a href="#">Login</a></li>
-        </ul>
       </div>
     </nav>
 
     <!-- Page Content -->
-
+    <div class="container" id="start-content">
       <!-- Main jumbotron for a primary marketing message or call to action -->
       <div class="jumbotron">
         <div class="container">
-          <h1 class="display-3">Hello, world!</h1>
-          <p>This is a template for a simple marketing or informational website. It includes a large callout called a jumbotron and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
-          <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more &raquo;</a></p>
+          <h1 class="display-3">MyBlog Home</h1><br>
+          <p>Welcome to this blog coded and designed for the Web Development Advanced Course at the Erasmus University College Brussels.</p>
+          <p>Feel free to post your own content or to just look arround!</p>
         </div>
       </div>
-
       <div class="container">
         <!-- Example row of columns -->
+        <div class="p-3 mb-2 bg-dark text-light rounded"><h1 class="text-light">Most Popular Posts</h1></div>
         <div class="row">
           <div class="col-md-4">
-            <h2>Heading</h2>
+            <h2 class="text-secondary">Heading</h2>
             <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
             <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
           </div>
           <div class="col-md-4">
-            <h2>Heading</h2>
-            <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+            <h2 class="text-secondary">Heading</h2>
+            <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
             <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
           </div>
           <div class="col-md-4">
-            <h2>Heading</h2>
+            <h2 class="text-secondary">Heading</h2>
             <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
             <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
           </div>
         </div>
         <hr />
-      </div> <!-- /container -->
-
+      </div>
+        <div class="container">
+        <!-- Example row of columns -->
+        <div class="p-3 mb-2 bg-dark text-light rounded"><h1 class="text-light">Featured Posts</h1></div>
+        <div class="row">
+          <div class="col-md-4">
+            <h2 class="text-secondary">Heading</h2>
+            <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+            <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
+          </div>
+          <div class="col-md-4">
+            <h2 class="text-secondary">Heading</h2>
+            <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+            <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
+          </div>
+          <div class="col-md-4">
+            <h2 class="text-secondary">Heading</h2>
+            <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+            <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
+          </div>
+        </div>
+        <hr />
+      </div> 
+      
+      <!-- /container -->
+    </div><!-- /container -->
     <footer class="container">
-      <p>&copy; Company 2017-2018</p>
+      <p>&copy; Tijl Muys, EhB - 2017-2018</p>
     </footer>
   </body>
 </html>

@@ -1,45 +1,16 @@
 $(document).ready(function () {
     //Send ajax request to get all posts from server
-    var form = $("#form");
     $.ajax({
         url: "ajax/blogpostsLoader.php",
         type: "POST",
         dataType: "json",
         error: function (xhr, ajaxOptions, thrownError) {
-            alert(xhr.status);
-            alert(thrownError);
+            console.log(xhr.status);
+            console.log(thrownError);
         },
         success: getAllAjaxSuccess
     });
     
-    $('#form').submit(function (e) {
-    e.preventDefault(); //normaal gedrag van submit event tegenhouden (=versturen formulier)
-    var form = $(this);
-    
-    $.ajax({
-        url: form.attr("action"),
-        type: "POST",
-        dataType: "json",
-        data: form.serialize(), // alle data van het formulier
-        error: function (xhr, ajaxOptions, thrownError) {
-            alert(xhr.status);
-            alert(thrownError);
-        },
-        success: function(data) {
-            form.hide(); //formulier verwijderen
-            
-            if(data.blogposts) 
-            {
-               var content;
-               for (i = 0; i < data.blogposts.length; i++) { 
-                   content = formatBlogpost(data.blogposts[i]);
-                   $("#data").append(content);
-               }
-                
-            }
-        }
-    });
-  });
     
     //Success function of AJAX request for all blogposts
     function getAllAjaxSuccess(data)
@@ -57,12 +28,18 @@ $(document).ready(function () {
                 $("#dynamic-blogposts").append(content);
             } 
          }
-        //call upon the pagination function
-        pagination();
+        //call upon the pagination function (FIRST TIME)
+        pagination(true);
         
-        //test
-        //filterOnCategory("Food");
-        
+        //test if there was an external filter
+        //get the potential url parameters for the filter
+        var filterUrlParams = getUrlParams();
+        //if there is a filter parameter call, apply the filtering
+        if(typeof filterUrlParams["filter"] !== 'undefined')
+        {
+            //Remove potential # that are added to the url when using page numbers
+            filterOnCategory(filterUrlParams["filter"].replace("#", ""));
+        }
     }
     
      function sidebar(data)
@@ -80,16 +57,20 @@ $(document).ready(function () {
     
      function positionSidebar()
     {
+        /*
          //Sticky sidebar while scrolling when screen is large enough
-        if ($('body').first().innerWidth() > 750) 
+        if ($('body').first().innerWidth() > 767) 
         {
-            $('#affix').addClass("affix");
+            $('#affix').addClass("fixed-top");
+            $('#affix').css({"margin-left":"auto", "margin-top":"60px", "margin-right":"0"});
         } 
         //If screen is small sidebar moves to bottom (=no sticky sidebar)
         else 
         {
-            $('#sidebar').removeClass("affix");
+            $('#affix').removeClass("fixed-top");
+            $('#affix').css({"margin-left":"inherit", "margin-top":"inherit", "margin-right":"inherit"});
         }
+        */
     }
     
     //Generates popular section in sidebar
@@ -109,7 +90,7 @@ $(document).ready(function () {
             //settext of listitemlink
             newListItemLink.text(top3Posts[i]["Title"] + " (" + top3Posts[i]["numComments"] + ")");
             //add href attribute to listitemlink
-            newListItemLink.attr("href", "" + "#" + "");
+            newListItemLink.attr("href", "blogpostdetail.php?Id=" + top3Posts[i]["Id"]);
             //apend listitemlink to listitem
             newListitem.append(newListItemLink);
             //append listitem to popularList
@@ -180,13 +161,15 @@ $(document).ready(function () {
             //make new listitem
             var newListitem = $("<li>");
             //make link to add to Listitem
-            var newListItemLink = $("<a>");
+            var newListItemLink = $("<a href=''>");
             //settext of listitemlink
             newListItemLink.text("All");
             //add new class to listitemlink
             newListItemLink.addClass("categoryLink");
             //add eventListener to link
-            newListItemLink.on("click", function(){
+            newListItemLink.on("click", function(e){
+                //stop default behaviour
+                e.preventDefault();
                 //get category to filter on
                 var currentCategory = $(this).text();
                 //call upon the filterOnCategory function
@@ -206,13 +189,15 @@ $(document).ready(function () {
             //make new listitem
             var newListitem = $("<li>");
             //make link to add to Listitem
-            var newListItemLink = $("<a>");
+            var newListItemLink = $("<a href=''>");
             //settext of listitemlink
             newListItemLink.text(currentCategory);
             //add new class to listitemlink
             newListItemLink.addClass("categoryLink");
             //add eventListener to link
-            newListItemLink.on("click", function(){
+            newListItemLink.on("click", function(e){
+                //stop default behaviour
+                e.preventDefault();
                 //get category to filter on
                 var currentCategory = $(this).text();
                 //call upon the filterOnCategory function
@@ -240,7 +225,9 @@ $(document).ready(function () {
          { 
              var currentPost = data.blogposts[i];
              //get Date of current post
-             var currentYearMonth = new Date(currentPost["Date"]);
+             //Modify string for safari browser
+             var currentYearMonthString = currentPost["Date"].substr(0, currentPost["Date"].indexOf(" "));
+             var currentYearMonth = new Date(currentYearMonthString);
              //set miliseconds, seconds, minutes, hours and day on zero
              currentYearMonth.setMilliseconds(0);
              currentYearMonth.setSeconds(0);
@@ -267,11 +254,21 @@ $(document).ready(function () {
              //make new listitem
              var newListitem = $("<li>");
              //make link to add to Listitem
-             var newListItemLink = $("<a>");
+             var newListItemLink = $("<a href=''>");
              //settext of listitemlink by using the getFullYear and getMonth methods and our custom getMonthName function
              newListItemLink.text(archiveListingsArray[i].getFullYear() + " - " + getMonthName(archiveListingsArray[i].getMonth()));
              //add new class to listitemlink
              newListItemLink.addClass("archiveLink");
+             //add eventListener to link
+             newListItemLink.on("click", function(e){
+                 //stop default behaviour
+                 e.preventDefault();
+                 //get category to filter on
+                 var currentYearMonth = $(this).text();
+                 console.log(currentYearMonth);
+                 //call upon the filterOnCategory function
+                 filterOnDate(currentYearMonth);
+             });
              //apend listitemlink to listitem
              newListitem.append(newListItemLink);
              //append listitem to archiveList
@@ -309,35 +306,47 @@ $(document).ready(function () {
         outerdiv.attr("commentCount", $rawData["Comments"].length);
         //Add category
         outerdiv.attr("category", $rawData["CategoryName"]);
-        //get Date object from rawdata
-        var currentDate = new Date($rawData["Date"]);
+        //get Date object from rawdata and do some string manipulation for safari browser
+        var currentYearMonthString = $rawData["Date"].substr(0, $rawData["Date"].indexOf(" "));
+        var currentDate = new Date(currentYearMonthString);
         //Add yearDate-string (using function to convert monthnumber to full name)
         outerdiv.attr("yearDate", (currentDate.getFullYear() + " - " + getMonthName(currentDate.getMonth())));
         //add isFiltered attribute (default true)
         outerdiv.attr("isFiltered", true);
+        //Add Tooltip
+        outerdiv.attr("Title", "This post has " + $rawData["Comments"].length + " comments");
         
-            //Create image tag
+        //Create image tag
             var imagetag = $('<img>', {class: 'card-img-top'});
             //add blogpost ImageUrl
             imagetag.attr("src", $rawData["ImageUrl"]);
+            //Dynamic resize
+            imagetag.addClass("img-fluid");
+            imagetag.css({"max-width": "100%", "height": "auto"});
             //generate alternate text
             imagetag.attr("alt", ("Corresponding Image of Blogpost with Title: " + $rawData["Title"]));
-        //append to outerdiv
-        outerdiv.append(imagetag);
+            //append to body
+            outerdiv.append(imagetag);
         
-            //Create blogpost body
+        //Create blogpost body
             var blogpostbody = $('<div>', {class: 'card-body'});
+          
             //Create Blogpost Title
             var blogpostTitle = $('<h2>', {class: 'card-title'});
             blogpostTitle.text($rawData["Title"]);
             blogpostbody.append(blogpostTitle);
             //Create Blogpost (condensed) Content
             var blogpostContent = $('<p>', {class: 'card-text'});
-            blogpostContent.text($rawData["Content"]);
+            //get condensed article with only the first 100 words //slice first 100 on spaces and join them again
+            var blopostTextCondensed = $rawData["Content"].split(' ').slice(0,100).join(' ');
+            blogpostContent.text(blopostTextCondensed + " ...");
+            //add opacity gradient (if supported)
+            blogpostContent.css({"opacity":"0.75"});
+            //Append to blogpost
             blogpostbody.append(blogpostContent);
             //Create detailpage link
             var blogpostLink = $('<a>', {class: 'btn btn-primary'});
-            blogpostLink.attr("href", "#");
+            blogpostLink.attr("href", "blogpostdetail.php?Id=" + $rawData["Id"]);
             blogpostLink.text("Read More");
             blogpostbody.append(blogpostLink);
         //append to outerdiv
@@ -346,16 +355,24 @@ $(document).ready(function () {
         //Create blogpost-footer
             var blogpostfooter = $('<div>', {class: 'card-footer text-muted'});
             blogpostfooter.text("Posted on " + $rawData["Date"] + ", by " + $rawData["Username"]);
-            blogpostfooter.append($('<hr>'));
         //append to outerdiv
         outerdiv.append(blogpostfooter);
         
+        //add EventListeners for doubleclicking and hovering
+        outerdiv.on("dblclick", function() {
+            window.location.href= "blogpostdetail.php?Id=" + $rawData["Id"];
+        });
+        /*
+        outerdiv.on("hover", function() {
+            $(this).attr("Title", "This post has " + $rawData["Comments"].length + " comments");
+        });
+        */
         return outerdiv;
     
     }
     
     //shows blogposts on different pages
-    function pagination()
+    function pagination(isFirst)
     {
         //PAGINATION
         //Get number of blogposts for pagination
@@ -387,32 +404,39 @@ $(document).ready(function () {
                 
             }
         });
-        //Add click event to page-link-prev class (=previous page)
-        $(".pagination .page-link-prev").on("click", function(){
-            //get current active page
-            var currentPageNumber = $(".pagination li.active").first().index();
-            //only proceed if currentpage is greater than the min number of pages (=1)
-            if (currentPageNumber > 1)
-            {
-                //decrease currentPagenumber
-                currentPageNumber--;
-                //call upon the changepage function
-                changePage(currentPageNumber, postsPerPageLimit);
-            }
-        });
-        //Add click event to page-link-next class (=next page)
-        $(".pagination .page-link-next").on("click", function(){
-            //get current active page
-            var currentPageNumber = $(".pagination li.active").first().index();
-            //only proceed if currentpage is smaller than the max number of pages
-            if (currentPageNumber < numberOfPages && currentPageNumber != 1)
-            {
-                //increment currentPagenumber
-                currentPageNumber++;
-                //call upon the changepage function
-                changePage(currentPageNumber, postsPerPageLimit);
-            }
-        });
+        //Add click event to page-link-prev class (=previous page) ONLY THE FIRST TIME, otherwise a page gets skipped!
+        if(isFirst == true)
+        {
+            $(".pagination .page-link-prev").on("click", function(){
+                //get current active page
+                var currentPageNumber = $(".pagination li.active").first().index();
+                //only proceed if currentpage is greater than the min number of pages (=1)
+                if (currentPageNumber > 1)
+                {
+                    //decrease currentPagenumber
+                    currentPageNumber--;
+                    //call upon the changepage function
+                    changePage(currentPageNumber, postsPerPageLimit);
+                }
+            });
+            //Add click event to page-link-next class (=next page) ONLY THE FIRST TIME, otherwise a page gets skipped!
+            $(".pagination .page-link-next").on("click", function(){
+                //recalculate numberOfPages
+                var numberOfPosts = $("#dynamic-blogposts .card[isFiltered=true]").length;
+                var numberOfPages = Math.ceil(numberOfPosts / 4);
+                //get current active page
+                var currentPageNumber = $(".pagination li.active").first().index();
+                //only proceed if currentpage is smaller than the max number of pages
+                if (currentPageNumber < numberOfPages)
+                {
+                    //increment currentPagenumber
+                    currentPageNumber++;
+                    //call upon the changepage function
+                    changePage(currentPageNumber, postsPerPageLimit);
+                }
+            });
+        }
+        
     }
     
     //function to change from one page to another
@@ -488,8 +512,45 @@ $(document).ready(function () {
         }
         
         //rerun the pagination function
-        pagination();
+        pagination(false);
+    }
+    
+    //filteronDate
+    function filterOnDate(YearMonthString)
+    {
+        //reset pagination -navbars
+        resetPageNavBars();
+        //select all blogposts that are not part of this date
+        var redundantBlogposts = $("#dynamic-blogposts .card:not([yeardate='" + YearMonthString + "'])");
+        //set attribute isFiltered on false for these (now) redundant blogposts, so they won't get picked up by the pagination function anymore
+        redundantBlogposts.attr("isFiltered", false);
+        //hide the redundant blogposts
+        redundantBlogposts.hide();
+
+        //select all blogposts that are part of this date
+         var desiredBlogposts = $("#dynamic-blogposts .card[yeardate='" + YearMonthString + "']");
+        //set attribute isFiltered on true for the posts of the date
+        desiredBlogposts.attr("isFiltered", true);
+        //show the desired blogposts
+        desiredBlogposts.show();
+
+        //set subtitle of page
+        $("#h1 small").text(YearMonthString);
         
+        //rerun the pagination function (not first time)
+        pagination(false);
+    }
+        
+    //Function that return the url parameters of a GET request
+    function getUrlParams()
+    {
+        //initiate empty array
+        var params = {};
+        //get the url of the current page, and for all matches of the regular expression we call an annonymous function that adds the key and value of the parameter to the params array
+        //following line of code found at http://papermashup.com/read-url-get-variables-withjavascript/, originally written by Ashley Ford
+        window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {params[key] = value;});
+        //return the array
+        return params;
     }
     
 });

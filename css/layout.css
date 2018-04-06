@@ -2,6 +2,10 @@
     margin-top: 50px;
 }
 
+#login-start {
+    margin-top: 100px;
+}
+
 .img-fluid {
     max-width: 100%;
     height: auto;
@@ -37,4 +41,13 @@
     text-shadow: black 0.3em 0.3em 0.3em;
     min-width: 100%;
     max-width: 100%;
+}
+
+fieldset {
+    border: 1px solid #ddd !important;
+    margin: 0;
+    padding: 10px;       
+    border-radius:4px;
+    background-color:#f5f5f5;
+    padding-left:10px!important;
 }

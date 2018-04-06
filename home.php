@@ -6,7 +6,7 @@
     <meta name="description" content="Holmepage of blog">
     <meta name="author" content="Tijl Muys">
 
-    <title>Jumbotron Template for Bootstrap</title>
+    <title>Home</title>
     <!-- Bootstrap core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <!-- JQuery -->
@@ -21,7 +21,7 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="site-navbar">
       <div class="container">
-        <a class="navbar-brand" href="#">MyBlog</a>
+        <a class="navbar-brand" href="home.php">MyBlog</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -33,13 +33,13 @@
               </a>
             </li>
             <li class="nav-item">
+              <a class="nav-link" href="aboutpage.php">About</a>
+            </li>
+            <li class="nav-item">
               <a class="nav-link" href="blogposts.php">Blogposts</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">About</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Login</a>
+              <a class="nav-link" href="loginpage.php">Login</a>
             </li>
           </ul>
         </div>

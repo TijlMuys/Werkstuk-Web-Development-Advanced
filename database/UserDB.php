@@ -1,6 +1,6 @@
 <?php
-    include_once "data/User.php";
-    include_once "database/DatabaseFactory.php";
+    include_once "../data/User.php";
+    include_once "DatabaseFactory.php";
 
     //Class that contains CRUD methods for Users, does not contain any data, only static methods
     class UserDB

@@ -35,6 +35,7 @@ $(document).ready(function () {
         {
             console.log(data.blogpostdetail);
             formatDetails(data.blogpostdetail);
+            formatComments(data.blogpostdetail);
             
         }
     }
@@ -63,7 +64,7 @@ $(document).ready(function () {
         blogDetailContainer.append("<hr>");
         
         //Create image tag
-        var imagetag = $('<img>', {class: 'img-fluid rounded'});
+        var imagetag = $('<img>', {class: 'img-fluid rounded img-blogpost'});
         //add image source
         imagetag.attr("src", data["ImageUrl"]);
         //Dynamic resize
@@ -88,6 +89,62 @@ $(document).ready(function () {
         
     }
     
+     //function to construct comments of blogpost in pretty container
+    function formatComments(data)
+    {  
+        //get commentDiv
+        var commentContainer = $("#commentDiv");
+        //Iterate over Comments
+        for(var i = 0; i < data["Comments"].length; i++)
+        {
+           
+            //Create outerdiv of comment
+            var commentOuterDiv = $('<div>', {class: 'media mb-4'});
+            
+            //create image tag for comment
+            var commentImage = $('<img>', {class: 'd-flex mr-3 rounded-circle', src: 'images/chat.png', alt: 'text bubble'});
+            //Append imagetag
+            commentOuterDiv.append(commentImage);
+            
+            //Create innerDiv of comment
+            var commentInnerDiv = $('<div>', {class: 'media-body'});
+            
+            //create header tag for comment
+            var commentHeader = $('<h5>', {class: 'mt-0'});
+            //set text for header
+            commentHeader.text(""+ data["Comments"][i]["Username"] +"");
+            //add header to innerdiv
+            commentInnerDiv.append(commentHeader);
+            
+            //create paragraph tag for comment
+            var commentContent = $('<p>', {class: 'text-secondary'});
+            //set text for paragraph
+            commentContent.html(""+ data["Comments"][i]["Content"] +"<br>");
+           
+            
+             //create date tag for comment
+            var commentDate = $('<small>', {class: 'text-info'});
+            //set text for date tag
+            commentDate.text("Comment written on "+ data["Comments"][i]["Date"] +"");
+            //add date tag to paragraph
+            commentContent.append(commentDate);
+            
+            //add paragraph to innerdiv
+            commentInnerDiv.append(commentContent);
+
+            //Add innerdiv to outerdiv
+            commentOuterDiv.append(commentInnerDiv);
+            
+            //add horizontal rule to outer div
+            commentOuterDiv.append("<hr>");
+            
+            //add outerdiv to our commentdiv
+            commentContainer.append(commentOuterDiv);
+            
+        }
+      
+    }
+    
     //Function that return the url parameters of a GET request
     function getUrlParams()
     {
@@ -98,6 +155,77 @@ $(document).ready(function () {
         window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {params[key] = value;});
         //return the array
         return params;
+    }
+    
+    //Add eventlistener to our comment form
+    $("#commentForm").on('submit', function(e){
+        //prevent default behaviour
+        e.preventDefault();
+        console.log($("#commentForm").attr("action"));
+        console.log($("#commentContent").val());
+        console.log($("#blogpostId").val());
+        console.log($("#commentForm").serialize());
+        //proceed with ajax call if both field are valid
+        if(validateCommentContent($("#commentContent")) == true)
+        {
+            //sent ajax request for user validation
+            $.ajax({
+                url: $("#commentForm").attr("action"),
+                type: "POST",
+                dataType: "json",
+                data: $("#commentForm").serialize(),
+                error: function (xhr, ajaxOptions, thrownError) {
+                    //show that something went wrong
+                    $("#commentForm").removeClass("is-valid");
+                    $("#commentForm").addClass('is-invalid');
+                    $("#commentForm .form-control").removeClass("is-valid");
+                    $("#commentForm .hidden").addClass('is-invalid');
+                    console.log(xhr.status);
+                    console.log(thrownError); 
+                },
+                success: postCommentSuccess
+            });
+            
+        }
+    });
+    
+    //validate commentContent
+    function validateCommentContent(commentContentInputTag)
+    {
+        //test if username matches the regular expression (length need to between 1 and 30 characters)
+        if(commentContentInputTag.val().length > 3 && commentContentInputTag.val().length < 1000)
+        {
+            //add class to indicate that the input field is valid and remove the other
+            commentContentInputTag.removeClass("is-invalid");
+            commentContentInputTag.addClass("is-valid");
+            return true;
+        }
+        else
+        {
+            //add class to indicate that the input field is invalid and remove the other
+            commentContentInputTag.removeClass("is-valid");
+            commentContentInputTag.addClass("is-invalid");
+            return false;
+        }
+    }
+    
+    function postCommentSuccess(dataRes)
+    {
+        console.log(dataRes.response);
+        if(dataRes.response == "success")
+        {
+            //reload page
+            location.reload();
+        }
+        else
+        {
+            //Show that something went wrong
+            $("#commentForm").removeClass("is-valid");
+            $("#commentForm").addClass('is-invalid');
+            $("#commentForm .form-control").removeClass("is-valid");
+            $("#commentForm .hidden").addClass('is-invalid');
+        }
+       
     }
     
 });

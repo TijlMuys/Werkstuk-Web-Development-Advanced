@@ -1,4 +1,18 @@
-
+<?php
+    //include user class
+    include_once("data/User.php");
+    //start session
+    session_start();   
+    
+    //initiate current loggedinUser on false
+    $loggedInUser = false;
+    //check if user is logged in, if the case convert data to the logginInuser variable
+    if(isset($_SESSION["loggedInUser"]))
+    {
+        $loggedInUser = $_SESSION["loggedInUser"];
+        
+    }
+?>
 <!doctype html>
 <html lang="en">
   <head>
@@ -25,7 +39,7 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="site-navbar">
       <div class="container">
-        <a class="navbar-brand" href="home.php">MyBlog</a>
+         <a class="navbar-brand" href="home.php">MyBlog <?php if($loggedInUser != false) { echo("<small class='text-secondary'> - Welcome ". $loggedInUser->Username ."!</small>");} ?></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -40,17 +54,39 @@
             <li class="nav-item">
               <a class="nav-link" href="blogposts.php">Blogposts</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="newpost.php">Create Post</a>
-            </li>
-             <li class="nav-item">
-              <a class="nav-link" href="adminpage.php">Admin</a>
-            </li>
-            <li class="nav-item active">
-              <a class="nav-link" href="loginpage.php">Login
-               <span class="sr-only">(current)</span>
-              </a>
-            </li>
+            <?php
+              //only add option if a user is logged in
+              if($loggedInUser != false)
+              {
+                  echo("<li class='nav-item'>
+                        <a class='nav-link' href='newpost.php'>Create Post</a>
+                        </li>");
+              }
+              //only add option if a user is an administrator
+              if($loggedInUser->IsAdmin == 1)
+              {
+                  echo("<li class='nav-item'>
+                        <a class='nav-link' href='adminpage.php'>Admin</a>
+                        </li>");
+              }
+              //option changes depending on the fact wheter of not the user is currently logged in
+              if($loggedInUser == false)
+              {
+                  echo("<li class='nav-item active'>
+                        <a class='nav-link' href='loginpage.php'>Login
+                        <span class='sr-only'>(current)</span>
+                        </a>
+                        </li>");
+              }
+              else
+              {
+                  echo("<li class='nav-item active'>
+                        <a class='nav-link' href='signoutpage.php'>Logout
+                        <span class='sr-only'>(current)</span>
+                        </a>
+                        </li>");
+              }
+            ?>
           </ul>
         </div>
       </div>
@@ -82,7 +118,7 @@
                       <input type="password" id="loginPass" name="loginPass" class="form-control" placeholder="Password" required>
                       <div class="invalid-feedback">The password needs to be between 8 and 30 characters long</div>
                   </div>
-                  <div class="form-group" id="loginPassGroup">
+                  <div class="form-group" id="loginHiddenGroup">
                       <input type="hidden" class="form-control hidden">
                       <div class="invalid-feedback">Username or password is incorrect or could not be verified in the database</div>
                   </div>
@@ -92,7 +128,7 @@
                 </form>
                 
                 <!-- REGISTER FORM -->
-                <form  class="form-signin"  id="registerForm" method="post" action="ajax/register.php" novalidate>
+                <form  class="form-signin"  id="registerForm" method="post" action="ajax/registerUser.php" novalidate>
                   <!-- 
                   Login icon used from free version of Font Awesome: https://fontawesome.com/icons/user-plus?style=solid 
                   
@@ -101,9 +137,14 @@
                   -->
                   <img class="mb-4" src="images/register.png" alt="" width="72" height="72">
                   <h1 class="h3 mb-3 font-weight-normal">Register New Account</h1>
+                    <div class="form-group" id="registerUsernameGroup">
+                          <label for="registerUsername" class="sr-only">Username</label>
+                          <input type="text" id="registerUsername" name="registerUsername" class="form-control" placeholder="Username" required autofocus>
+                          <div class="invalid-feedback">Please provide a username that consists of maximum 30 characters</div>
+                      </div>
                      <div class="form-group" id="registerEmailGroup">
-                          <label for="registerEmail" class="sr-only">Email address</label>
-                          <input type="email" id="registerEmail" name="registerEmail" class="form-control" placeholder="Email address" required autofocus>
+                          <label for="registerMail" class="sr-only">Email address</label>
+                          <input type="email" id="registerMail" name="registerMail" class="form-control" placeholder="Email address" required>
                           <div class="invalid-feedback">Please provide a vaild email address</div>
                       </div>
                      <div class="form-group" id="registerPassGroup">
@@ -111,8 +152,12 @@
                           <input type="password" id="registerPass" name="registerPass" class="form-control" placeholder="Password" required>
                           <div class="invalid-feedback">The password needs to be between 8 and 30 characters long</div>
                     </div>
+                    <div class="form-group" id="registerHiddenGroup">
+                      <input type="hidden" class="form-control hidden">
+                      <div class="invalid-feedback">Sorry, we couldn't add you to our database. The given email-address might be already taken or something went wrong.</div>
+                  </div>
                   <br>
-                  <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+                  <button class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
                   <br>
                 </form>
                 <br>

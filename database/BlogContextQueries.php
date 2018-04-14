@@ -1,6 +1,5 @@
 <?php
     include_once "../data/BlogContext.php";
-    include_once "CommentDB.php";
     include_once "DatabaseFactory.php";
 
     //This class contains queries to retrieve Blogcontext-objects from the database, since Blogcontext does not correspond with a Database Table, direct DML statements are impossible
@@ -39,7 +38,7 @@
                 
                     //Get correspônding comments of (partial) blogcontext
                         //retreive comments that match current blogpost
-                        $innerqueryresult = CommentDB::getByBlogpostId($blogcontext->Id);
+                        $innerqueryresult = BlogContextQueries::getCommentContextByBlogpostId($blogcontext->Id);
                         //add innerresults to our outer blogcontext
                         $blogcontext->Comments =  $innerqueryresult;
                 
@@ -78,13 +77,45 @@
             
             //Get correspônding comments of (partial) blogcontext
                         //Prepare inner query string
-                        $innerquery = CommentDB::getByBlogpostId($blogcontext->Id);
+                        $innerquery = BlogContextQueries::getCommentContextByBlogpostId($blogcontext->Id);
                         
                         //add queryresult as out comment datamemeber
                         $blogcontext->Comments =  $innerquery;
             
             //Return the object
             return $blogcontext;
+            
+        }
+        
+        public static function getCommentContextByBlogpostId($blogpostId)
+        {
+            //Prepare query string
+            $query =    "SELECT c.Id, c.BlogpostId, c.UserId, u.Username, c.Date, c.Content 
+                        FROM COMMENTS c 
+                        JOIN USERS u ON(c.UserId = u.Id)
+                        WHERE BlogpostId ='?'
+                        ORDER BY c.Date DESC";
+            $parameters = array($blogpostId);
+            
+            //Execute query
+            $conn = self::getConnection();
+            $result = $conn->executeQuery($query, $parameters);
+             
+            //initialize empty resultsArray to return to frontend
+            $resultsArray = array();
+            //iterate over resultset
+            for($i = 0; $i < $result->num_rows; $i++)
+            {
+                //Request current selected row from resultset as array
+                $row = $result->fetch_array();
+                //Convert row to Comment object
+                $comment = BlogContextQueries::convertInnerRow($row);
+                //Add blogpost object to resultsArray
+                $resultsArray[$i] = $comment;
+            }
+            
+            //Return the resultsArray
+            return $resultsArray;
             
         }
         
@@ -101,6 +132,19 @@
                 $row['Date'],
                 $row['Content'],
                 $row['ImageUrl']
+            );
+        }
+        
+         //Convert function to convert innerrow to BlogcontextComment
+        protected static function convertInnerRow($row)
+        {
+            return new BlogContextComment(
+                $row['Id'],
+                $row['BlogpostId'],
+                $row['UserId'],
+                $row['Username'],
+                $row['Date'],
+                $row['Content']
             );
         }
     }

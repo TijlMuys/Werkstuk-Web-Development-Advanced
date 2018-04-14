@@ -95,7 +95,6 @@
             
         }
         
-        
         //Insert a Comment
         public static function insert($comment)
         {

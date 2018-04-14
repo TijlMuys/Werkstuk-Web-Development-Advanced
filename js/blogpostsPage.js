@@ -100,6 +100,13 @@ $(document).ready(function () {
     
     function getInfoPopularPosts(data)
     {
+        //normally three posts will be shown
+        var numberofEntries = 3;
+        //check if there are at least three posts
+        if(data.blogposts.length < 3)
+        {
+            numberofEntries = data.blogposts.length;
+        }
         //Determine 3 most popular posts
         //First initiate an array that will contains blogIds with their respective comments
         var postsWithCommentData = new Array(data.blogposts.length);
@@ -120,7 +127,7 @@ $(document).ready(function () {
         //Initiate an array that will contain a string with the top 3 posts' Titles
         var top3Posts = new Array(3);
         //Iterate over top 3 of postsdata
-        for (i = 0; i < 3; i++)
+        for (i = 0; i < numberofEntries; i++)
         {
             var numberOfComments = top3PostsData[i].slice(0, top3PostsData[i].indexOf('´'));
             var blogId = top3PostsData[i].slice(top3PostsData[i].indexOf('´')+1, top3PostsData[i].indexOf('`'));
@@ -321,8 +328,8 @@ $(document).ready(function () {
             //add blogpost ImageUrl
             imagetag.attr("src", $rawData["ImageUrl"]);
             //Dynamic resize
-            imagetag.addClass("img-fluid");
-            imagetag.css({"max-width": "100%", "height": "auto"});
+            imagetag.addClass("img-fluid, img-blogpost");
+            imagetag.css({"max-width": "100%"});
             //generate alternate text
             imagetag.attr("alt", ("Corresponding Image of Blogpost with Title: " + $rawData["Title"]));
             //append to body
@@ -359,7 +366,7 @@ $(document).ready(function () {
         outerdiv.append(blogpostfooter);
         
         //add EventListeners for doubleclicking and hovering
-        outerdiv.on("dblclick", function() {
+        outerdiv.on("click", function() {
             window.location.href= "blogpostdetail.php?Id=" + $rawData["Id"];
         });
         /*

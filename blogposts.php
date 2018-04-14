@@ -1,6 +1,17 @@
 <?php
-    $filter = "Politics";
+    //include user class
+    include_once("data/User.php");
+    //start session
+    session_start();   
     
+    //initiate current loggedinUser on false
+    $loggedInUser = false;
+    //check if user is logged in, if the case convert data to the logginInuser variable
+    if(isset($_SESSION["loggedInUser"]))
+    {
+        $loggedInUser = $_SESSION["loggedInUser"];
+        
+    }
 ?>
 <!doctype html>
 <html lang="en">
@@ -26,7 +37,7 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="site-navbar">
       <div class="container">
-        <a class="navbar-brand" href="home.php">MyBlog</a>
+         <a class="navbar-brand" href="home.php">MyBlog <?php if($loggedInUser != false) { echo("<small class='text-secondary'> - Welcome ". $loggedInUser->Username ."!</small>");} ?></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -43,9 +54,35 @@
                <span class="sr-only">(current)</span>
               </a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="loginpage.php">Login</a>
-            </li>
+            <?php
+              //only add option if a user is logged in
+              if($loggedInUser != false)
+              {
+                  echo("<li class='nav-item'>
+                        <a class='nav-link' href='newpost.php'>Create Post</a>
+                        </li>");
+              }
+              //only add option if a user is an administrator
+              if($loggedInUser->IsAdmin == 1)
+              {
+                  echo("<li class='nav-item'>
+                        <a class='nav-link' href='adminpage.php'>Admin</a>
+                        </li>");
+              }
+              //option changes depending on the fact wheter of not the user is currently logged in
+              if($loggedInUser == false)
+              {
+                  echo("<li class='nav-item'>
+                        <a class='nav-link' href='loginpage.php'>Login</a>
+                        </li>");
+              }
+              else
+              {
+                  echo("<li class='nav-item'>
+                        <a class='nav-link' href='signoutpage.php'>Logout</a>
+                        </li>");
+              }
+            ?>
           </ul>
         </div>
       </div>

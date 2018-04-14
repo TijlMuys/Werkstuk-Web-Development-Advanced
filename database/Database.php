@@ -63,7 +63,6 @@
             $result = $this->connection->real_escape_string($parameter);
             return $result;
         }
-            
         
         //Method to execute Queries
         public function executeQuery($query, $params = null)

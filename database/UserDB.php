@@ -73,6 +73,28 @@
             return self::getConnection()->executeQuery($querystring, $parameters);
         }
         
+        //Get last inserted id
+        public static function lastInsertedId()
+        {
+            //Since persistent connections are off on the school's server, we can't use the LAST_INSERT_ID() function instead we will get the record with the highest id
+            
+            //Prepare query string
+            $query = "SELECT Id FROM USERS ORDER BY Id DESC";
+            
+            //Execute query
+            $conn = self::getConnection();
+            $result = $conn->executeQuery($query);
+             
+            //Check if at least one row is retrieved
+            if (count($result) == 0) return false;
+           
+            //Request current selected row from resultset as array
+            $row = $result->fetch_array();
+    
+            //Return isertId
+            return $row['Id'];
+        }
+        
          //Update a User
         public static function update($user)
         {

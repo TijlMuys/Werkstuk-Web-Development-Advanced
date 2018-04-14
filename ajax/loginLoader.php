@@ -1,11 +1,14 @@
 <?php
+    session_start();
     include_once("../initialize.php");
     include_once("../database/UserDB.php");
 
+
+    //$_POST["loginMail"] = "admin@gmail.com";
+    //$_POST["loginPass"] = "adminpassword";
     //Check if the post variable contains both an email and a password and are valid using the filter_var function of php and out own checkLength function
      if(isset($_POST["loginMail"]) == TRUE && filter_var($_POST["loginMail"], FILTER_VALIDATE_EMAIL) == TRUE &&  isset($_POST["loginPass"]) == TRUE && checkLength($_POST["loginPass"], 8, 30) == TRUE)
      {
-         
         //Get all users from the database
         $users = UserDB::getAll();
         //initiate variable that will hold the logged in user (when it exists)
@@ -30,12 +33,21 @@
         }
         else
         {
+            //If user is logged in set session variable
+            //Set session variable
+            $_SESSION["loggedInUser"] = $loggedInUser;
            //If user is found encode data and sent back
             $data["loggedInUser"] = $loggedInUser;
             $encodeddata = json_encode($data);
             echo($encodeddata);
         }
      }
+    else
+    {
+        $data["loggedInUser"] = "invalid";
+        $encodeddata = json_encode($data);
+        echo($encodeddata);
+    }
 
     //encryption and decryption functions 
     function encrypt($plain, $key) 
@@ -60,7 +72,4 @@
           return false;
         }
     }
-    
-   
- 
 ?>

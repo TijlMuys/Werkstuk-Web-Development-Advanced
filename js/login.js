@@ -45,9 +45,6 @@ $(document).ready(function () {
         //proceed with ajax call if both field are valid
         if(validateEmail($("#loginMail")) == true && validatePassword($("#loginPass")) == true)
         {
-            console.log("valid");
-            
-            
             //sent ajax request for user validation
             $.ajax({
                 url: loginForm.attr("action"),
@@ -55,8 +52,13 @@ $(document).ready(function () {
                 dataType: "json",
                 data: loginForm.serialize(),
                 error: function (xhr, ajaxOptions, thrownError) {
+                    //show that something went wrong
+                    $("#loginForm ").removeClass("is-valid");
+                    $("#loginForm").addClass('is-invalid');
+                    $("#loginForm .form-control").removeClass("is-valid");
+                    $("#loginForm .hidden").addClass('is-invalid');
                     console.log(xhr.status);
-                    console.log(thrownError);
+                    console.log(thrownError); 
                 },
                 success: loginAjaxSuccess
             });
@@ -64,37 +66,38 @@ $(document).ready(function () {
         }
     });
     
-    
      //add evenlistener to registerform
-    loginForm.on('submit', function(e){
+    registerForm.on('submit', function(e){
         //prevent default behaviour
         e.preventDefault();
         //proceed with ajax call if both field are valid
-        if(validateEmail($("#registerMail")) == true && validatePassword($("#registerPass")) == true)
+        if(validateUsername($("#registerUsername")) == true && validateEmail($("#registerMail")) == true && validatePassword($("#registerPass")) == true)
         {
-            console.log("valid");
-            //mark form as validated
-            loginForm.addClass('was-validated');
             //sent ajax request for user validation
             $.ajax({
-                url: loginForm.attr("action"),
+                url: registerForm.attr("action"),
                 type: "POST",
                 dataType: "json",
-                data: loginForm.serialize(),
+                data: registerForm.serialize(),
                 error: function (xhr, ajaxOptions, thrownError) {
+                     //show that something went wrong
+                    $("#registerForm").removeClass("is-valid");
+                    $("#registerForm").addClass('is-invalid');
+                    $("#registerForm .form-control").removeClass("is-valid");
+                    $("#registerForm .hidden").addClass('is-invalid');
                     console.log(xhr.status);
                     console.log(thrownError);
+                   
                 },
-                success: loginAjaxSuccess
+                success: registerAjaxSuccess
             });
             
         }
     });
     
-    //Success function of AJAX request for all blogposts
+    //Success function of AJAX request for logging in
     function loginAjaxSuccess(data)
     {
-        console.log(data);
         //check if returned user is false
         if(data.loggedInUser == false)
         {
@@ -113,12 +116,36 @@ $(document).ready(function () {
             //mark form as validated
             $("#loginForm .form-control").removeClass("is-invalid");
             $("#loginForm .form-control").addClass('is-valid');
-             //set session variable
-            sessionStorage.setItem("loggedInUser", JSON.stringify(data));
-            //get sessiondata
-            console.log(JSON.parse(sessionStorage.getItem("loggedInUser")));
+            //Redirect to home page
+            $(location).attr('href', 'home.php')
         }   
     }
+    //Success function of AJAX request for registering a new user
+    function registerAjaxSuccess(data)
+    {
+        //check if returned user is false
+        if(data.loggedInUser == false)
+        {
+            //if false display error message
+            $("#registerForm .form-control").removeClass("is-valid");
+            $("#registerForm .hidden").addClass('is-invalid');
+        }
+        else if(data.loggedInUser == "invalid")
+        {
+            //if false display error messages
+            $("#registerForm .form-control").removeClass("is-valid");
+            $("#registerForm .form-control").addClass('is-invalid');
+        }
+        else
+        {
+            //mark form as validated
+            $("#registerForm .form-control").removeClass("is-invalid");
+            $("#registerForm .form-control").addClass('is-valid');
+            //Redirect to home page
+            $(location).attr('href', 'home.php')
+        }   
+    }
+    
     
     //function that validates email addresses with regular expression
     function validateEmail(emailInputTag)
@@ -155,6 +182,25 @@ $(document).ready(function () {
             //add class to indicate that the input field is invalid and remove the other
             passwordInputTag.removeClass("is-valid");
             passwordInputTag.addClass("is-invalid");
+            return false;
+        }
+    }
+    
+    function validateUsername(usernameInputTag)
+    {
+        //test if username matches the regular expression (length need to between 1 and 30 characters)
+        if(/^.{1,30}$/.test(usernameInputTag.val()))
+        {
+            //add class to indicate that the input field is valid and remove the other
+            usernameInputTag.removeClass("is-invalid");
+            usernameInputTag.addClass("is-valid");
+            return true;
+        }
+        else
+        {
+            //add class to indicate that the input field is invalid and remove the other
+            usernameInputTag.removeClass("is-valid");
+            usernameInputTag.addClass("is-invalid");
             return false;
         }
     }

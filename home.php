@@ -1,3 +1,18 @@
+<?php
+    //include user class
+    include_once("data/User.php");
+    //start session
+    session_start();   
+    
+    //initiate current loggedinUser on false
+    $loggedInUser = false;
+    //check if user is logged in, if the case convert data to the logginInuser variable
+    if(isset($_SESSION["loggedInUser"]))
+    {
+        $loggedInUser = $_SESSION["loggedInUser"];
+        
+    }
+?>
 <!doctype html>
 <html lang="en">
   <head>
@@ -21,7 +36,7 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="site-navbar">
       <div class="container">
-        <a class="navbar-brand" href="home.php">MyBlog</a>
+        <a class="navbar-brand" href="home.php">MyBlog <?php if($loggedInUser != false) { echo("<small class='text-secondary'> - Welcome ". $loggedInUser->Username ."!</small>");} ?></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -38,9 +53,35 @@
             <li class="nav-item">
               <a class="nav-link" href="blogposts.php">Blogposts</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="loginpage.php">Login</a>
-            </li>
+            <?php
+              //only add option if a user is logged in
+              if($loggedInUser != false)
+              {
+                  echo("<li class='nav-item'>
+                        <a class='nav-link' href='newpost.php'>Create Post</a>
+                        </li>");
+              }
+              //only add option if a user is an administrator
+              if($loggedInUser->IsAdmin == 1)
+              {
+                  echo("<li class='nav-item'>
+                        <a class='nav-link' href='adminpage.php'>Admin</a>
+                        </li>");
+              }
+              //option changes depending on the fact wheter of not the user is currently logged in
+              if($loggedInUser == false)
+              {
+                  echo("<li class='nav-item'>
+                        <a class='nav-link' href='loginpage.php'>Login</a>
+                        </li>");
+              }
+              else
+              {
+                  echo("<li class='nav-item'>
+                        <a class='nav-link' href='signoutpage.php'>Logout</a>
+                        </li>");
+              }
+            ?>
           </ul>
         </div>
       </div>
@@ -58,45 +99,17 @@
       </div>
       <div class="container">
         <!-- Example row of columns -->
-        <div class="p-3 mb-2 bg-dark text-light rounded"><h1 class="text-light">Most Popular Posts</h1></div>
-        <div class="row">
-          <div class="col-md-4">
-            <h2 class="text-secondary">Heading</h2>
-            <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-            <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
-          </div>
-          <div class="col-md-4">
-            <h2 class="text-secondary">Heading</h2>
-            <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-            <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
-          </div>
-          <div class="col-md-4">
-            <h2 class="text-secondary">Heading</h2>
-            <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-            <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
-          </div>
+        <div class="p-3 mb-2 bg-dark text-light rounded"><h1 class="text-light">Popular Posts</h1></div>
+        <div class="row" id="popularContainer">
+          
         </div>
         <hr />
       </div>
         <div class="container">
         <!-- Example row of columns -->
         <div class="p-3 mb-2 bg-dark text-light rounded"><h1 class="text-light">Featured Posts</h1></div>
-        <div class="row">
-          <div class="col-md-4">
-            <h2 class="text-secondary">Heading</h2>
-            <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-            <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
-          </div>
-          <div class="col-md-4">
-            <h2 class="text-secondary">Heading</h2>
-            <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-            <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
-          </div>
-          <div class="col-md-4">
-            <h2 class="text-secondary">Heading</h2>
-            <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-            <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
-          </div>
+        <div class="row" id="featuredContainer">
+          
         </div>
         <hr />
       </div> 
@@ -106,6 +119,7 @@
     <footer class="container">
       <p>&copy; Tijl Muys, EhB - 2017-2018</p>
     </footer>
+    <script src="js/home.js"></script>
   </body>
 </html>
 

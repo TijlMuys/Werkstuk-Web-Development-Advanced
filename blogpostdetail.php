@@ -1,4 +1,23 @@
 <?php
+    //include user class
+    include_once("data/User.php");
+    //start session
+    session_start();   
+    
+    //initiate current loggedinUser on false
+    $loggedInUser = false;
+    //check if user is logged in, if the case convert data to the logginInuser variable
+    if(isset($_SESSION["loggedInUser"]))
+    {
+        $loggedInUser = $_SESSION["loggedInUser"];
+        
+    }
+    if(!isset($_GET["Id"]) || empty($_GET["Id"]))
+    {
+        header("Location: blogposts.php");
+        exit();
+    }
+
     $blogpostId = $_GET["Id"];
 ?>
 <!doctype html>
@@ -25,7 +44,7 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="site-navbar">
       <div class="container">
-        <a class="navbar-brand" href="home.php">MyBlog</a>
+         <a class="navbar-brand" href="home.php">MyBlog <?php if($loggedInUser != false) { echo("<small class='text-secondary'> - Welcome ". $loggedInUser->Username ."!</small>");} ?></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -42,9 +61,35 @@
                <span class="sr-only">(current)</span>
               </a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="loginpage.php">Login</a>
-            </li>
+            <?php
+              //only add option if a user is logged in
+              if($loggedInUser != false)
+              {
+                  echo("<li class='nav-item'>
+                        <a class='nav-link' href='newpost.php'>Create Post</a>
+                        </li>");
+              }
+              //only add option if a user is an administrator
+              if($loggedInUser->IsAdmin == 1)
+              {
+                  echo("<li class='nav-item'>
+                        <a class='nav-link' href='adminpage.php'>Admin</a>
+                        </li>");
+              }
+              //option changes depending on the fact wheter of not the user is currently logged in
+              if($loggedInUser == false)
+              {
+                  echo("<li class='nav-item'>
+                        <a class='nav-link' href='loginpage.php'>Login</a>
+                        </li>");
+              }
+              else
+              {
+                  echo("<li class='nav-item'>
+                        <a class='nav-link' href='signoutpage.php'>Logout</a>
+                        </li>");
+              }
+            ?>
           </ul>
         </div>
       </div>
@@ -57,41 +102,39 @@
         <!-- Post Content Column -->
         <div class="col-lg-8">
          <div id="mainContent">
-          <!-- Title
-          <h1 class="mt-4">Blog Post <?php echo($blogpostId) ?></h1>
-          <p class="lead">
-            by
-            <a href="#">Start Bootstrap</a>
-          </p>
-          <hr>
-          <p>Posted on January 1, 2018 at 12:00 PM</p>
-          <hr>
-          <img class="img-fluid rounded" src="http://placehold.it/900x300" alt="">
-          <hr>
-          <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus, vero, obcaecati, aut, error quam sapiente nemo saepe quibusdam sit excepturi nam quia corporis eligendi eos magni recusandae laborum minus inventore?</p>
-          <hr>-->
+          <!-- Js will add content here -->
           </div>
-          <!-- Comments Form -->
-          <div class="card my-4">
-            <h5 class="card-header">Leave a Comment:</h5>
-            <div class="card-body">
-              <form>
-                <div class="form-group">
-                  <textarea class="form-control" rows="3"></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
-              </form>
+          <!-- Comments Form (Display only if logged in)-->
+             <?php
+              //only add option if a user is logged in
+              if($loggedInUser != false)
+              {
+                  echo("<div class='card my-4'>
+                    <h5 class='card-header'>Leave a Comment:</h5>
+                    <div class='card-body'>
+                      <form id='commentForm' method='post' action='ajax/addComment.php'>
+                        <div class='form-group'>
+                          <textarea class='form-control' id='commentContent' name='commentContent' rows='3'></textarea>
+                          <div class='invalid-feedback'>The comment must have a length between 3 and 1000 characters</div>
+                        </div>
+                        <div class='form-group'>
+                              <input type='hidden' class='form-control hidden' id='blogpostId' name='blogpostId' value=".$blogpostId.">
+                              <div class='invalid-feedback'>Sorry, we couldn't add your comment to our database. It seems something went wrong</div>
+                          </div>
+                        <button type='submit' class='btn btn-primary'>Submit</button>
+                      </form>
+                    </div>
+                  </div>");
+              }
+            ?>
+        
+            <h2>Comments</h2>
+            <!-- Comments -->
+            <div id="commentDiv">
+                <!-- Js will add comments here -->
             </div>
-          </div>
-
-          <!-- Single Comment -->
-          <div class="media mb-4">
-            <img class="d-flex mr-3 rounded-circle" src="images/chat.png" alt="">
-            <div class="media-body">
-              <h5 class="mt-0">Commenter Name</h5>
-              Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-            </div>
-            </div>
+            <br>
+        <!-- end of column -->
         </div>
 
         <!-- Sidebar Widgets Column -->
@@ -148,7 +191,7 @@
           <!-- Side Widget -->
           <div class="card my-4">
             <div class="card-body">
-              <button type="button" class="btn btn-link"><a href="blogposts.php">Go Back</a></button>
+              <a href="blogposts.php"><button type="button" class="btn btn-link">Go Back</button></a>
             </div>
           </div>
 

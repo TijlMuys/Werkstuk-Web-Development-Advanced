@@ -34,4 +34,32 @@
             $this->Comments = $Comments;
         }
     }
+
+    class BlogContextComment
+    {
+        public $Id;
+        public $BlogpostId;
+        public $UserId;
+        public $Username;
+        public $Date;
+        public $Content;
+        
+        //Constructor of Blogpost
+        public function __construct($Id, $BlogpostId, $UserId, $Username, $Date, $Content) 
+        {
+            if($Id != -1)
+            {
+                $this->Id = $Id;
+            }
+            $this->BlogpostId = $BlogpostId;
+            $this->UserId = $UserId;
+            $this->Username = $Username;
+            if($Date != -1)
+            {
+               $this->Date = $Date;
+            }
+            $this->Content = $Content;
+        }
+    }
+
 ?>

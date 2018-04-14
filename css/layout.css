@@ -51,3 +51,21 @@ fieldset {
     background-color:#f5f5f5;
     padding-left:10px!important;
 }
+
+.pop-home-div {
+    background-image: url(../images/blogpostImages/soup.jpg);
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    min-width: 100%;
+    max-width: 100%;
+    opacity: 0.7;
+    min-height: 50px;
+}
+
+.img-blogpost {
+    width: 100%;
+    max-height: 300px;
+    object-fit: cover;
+    
+}

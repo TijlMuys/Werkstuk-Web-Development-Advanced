@@ -89,6 +89,13 @@
             return self::getConnection()->executeQuery($querystring, $parameters);
         }
         
+        public static function deleteById($blogpostId)
+        {
+            $querystring = "DELETE FROM BLOGPOSTS WHERE Id = '?'";
+            $parameters = array($blogpostId);
+            return self::getConnection()->executeQuery($querystring, $parameters);
+        }
+        
         //Get last inserted id
         public static function lastInsertedId()
         {

@@ -123,8 +123,7 @@
                
             
           </div>
-          <!-- Dynamic Blogposts script -->
-          <script src="js/blogpostsPage.js"></script>
+          
         
           
         <!-- Pagination -->
@@ -207,6 +206,10 @@
     <footer class="container">
       <p>&copy; Tijl Muys, EhB - 2017-2018</p>
     </footer>
+    <script src="js/blogpostsPaginationFilter.js"></script>
+    <script src="js/blogPostSidebars.js"></script>
+    <!-- Dynamic Blogposts script -->
+    <script src="js/blogpostsPage.js"></script>
   </body>
 </html>
 

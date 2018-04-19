@@ -1,24 +1,53 @@
 $(document).ready(function () {
-//Add eventlistener to our post form
+    //get all categories from server
+     $.ajax({
+                url: "ajax/categoryLoader.php",
+                type: "POST",
+                dataType: "json",
+                error: function (xhr, ajaxOptions, thrownError) {
+                    console.log(xhr.status);
+                    console.log(thrownError);
+                },
+                success: addCategories
+            });
+    //ajax response function for adding categories to dropbox
+    function addCategories(categoryData)
+    {
+        //get container
+        var catContainer = $("#Category");
+        //iterate over categories
+        for (i = 0; i < categoryData.length; i++) 
+        { 
+            //create new category option in selectbox
+            var currentOption = $('<option>');
+            //add categorytext to tag
+            currentOption.text(categoryData[i]["CategoryName"]);
+            //add option to container
+            catContainer.append(currentOption);
+        } 
+    }
+    
+    //Add eventlistener to our post form
     $("#postForm").on('submit', function(e){
         //prevent default behaviour
         e.preventDefault();
-        //generate formdata (serialize doesn't work with ajax)
-        var formData = new FormData();
-        //add data to formdata
-        formData.append('Title', $("#Title").val());
-        formData.append('Category', $("#Category").val());
-        formData.append('Content', $("#Content").val());
-        //add value if fileupload is not empty
-        if( document.getElementById("ImageUrl").files.length == 1 )
+        //proceed if form is valid
+        if(postformValidation() == true)
         {
-           formData.append('ImageUrl', document.getElementById("ImageUrl").files[0], document.getElementById("ImageUrl").files[0].name); 
-        }
+           //generate formdata (serialize doesn't work with ajax)
+            var formData = new FormData();
+            //add data to formdata
+            formData.append('Title', $("#Title").val());
+            formData.append('Category', $("#Category").val());
+            formData.append('Content', $("#Content").val());
+            //add value if fileupload is not empty
+            if( document.getElementById("ImageUrl").files.length == 1 )
+            {
+               formData.append('ImageUrl', document.getElementById("ImageUrl").files[0], document.getElementById("ImageUrl").files[0].name); 
+            }
+
+            console.log(formData);
         
-        console.log(formData);
-        //proceed with ajax call if both field are valid
-        if(validateCommentContent($("#postForm")) == true)
-        {
             //sent ajax request for user validation
             $.ajax({
                 url: $("#postForm").attr("action"),
@@ -40,33 +69,12 @@ $(document).ready(function () {
                     console.log(thrownError); 
                 },
                 success: postSuccess
-            });
+            });     
+        }
+        
             
-        }
+            
     });
-    
-    //validate postContent
-    function validateCommentContent(commentContentInputTag)
-    {
-        /*
-        //test if username matches the regular expression (length need to between 1 and 30 characters)
-        if(commentContentInputTag.val().length > 3 && commentContentInputTag.val().length < 1000)
-        {
-            //add class to indicate that the input field is valid and remove the other
-            commentContentInputTag.removeClass("is-invalid");
-            commentContentInputTag.addClass("is-valid");
-            return true;
-        }
-        else
-        {
-            //add class to indicate that the input field is invalid and remove the other
-            commentContentInputTag.removeClass("is-valid");
-            commentContentInputTag.addClass("is-invalid");
-            return false;
-        }
-        */
-        return true;
-    }
 
     //Ajax Response function
     function postSuccess(dataRes)
@@ -86,6 +94,20 @@ $(document).ready(function () {
             $("#commentForm").addClass('is-invalid');
             $("#commentForm .form-control").removeClass("is-valid");
             $("#commentForm .hidden").addClass('is-invalid');
+        }
+    }
+    
+    //function to validate form
+    function postformValidation()
+    {
+        //call all validation functions for Title, Category, Content and Image
+        if(validateStringLength($("#Title"),2, 100) && isNotEmpty($("#Category")) && validateStringLength($("#Content"), 10, 20000) && validateFile($("#ImageUrl"), 2000000))
+        {
+            return true;
+        }
+        else
+        {
+            return false
         }
     }
     

@@ -2,12 +2,23 @@
     session_start();
     include_once("../initialize.php");
     include_once("../database/UserDB.php");
+    include_once("validation.php");
+    include_once("encryption.php");
 
 
     //$_POST["loginMail"] = "admin@gmail.com";
     //$_POST["loginPass"] = "adminpassword";
-    //Check if the post variable contains both an email and a password and are valid using the filter_var function of php and out own checkLength function
-     if(isset($_POST["loginMail"]) == TRUE && filter_var($_POST["loginMail"], FILTER_VALIDATE_EMAIL) == TRUE &&  isset($_POST["loginPass"]) == TRUE && checkLength($_POST["loginPass"], 8, 30) == TRUE)
+
+    //check if user the httprequest was a POST request, otherwise return to homepage
+    if($_SERVER['REQUEST_METHOD'] != 'POST')
+    {
+        header('Location: ../home.php');
+        exit();
+        
+    }
+    
+    //Check if the post variable contains both an email and a password and are valid 
+     if(validPostVar("loginMail") && validateEmail($_POST["loginMail"]) &&  validPostVar("loginPass") && checkStringLength($_POST["loginPass"], 8, 30))
      {
         //Get all users from the database
         $users = UserDB::getAll();
@@ -47,29 +58,5 @@
         $data["loggedInUser"] = "invalid";
         $encodeddata = json_encode($data);
         echo($encodeddata);
-    }
-
-    //encryption and decryption functions 
-    function encrypt($plain, $key) 
-    { 
-         return openssl_encrypt($crypted,"AES-128-ECB", $key); 
-    } 
-
-    function decrypt($crypted, $key) 
-    { 
-        return openssl_decrypt($crypted,"AES-128-ECB", $key);
-    }
-
-    //Function to check password length
-    function checkLength($string, $lowerbound, $upperbound) 
-    {
-        if(strlen($string) >= $lowerbound && strlen($string) <= $upperbound) 
-        {
-          return true;
-        } 
-        else 
-        {
-          return false;
-        }
     }
 ?>

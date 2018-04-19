@@ -113,7 +113,7 @@
                       <label for="Title"><h4 class="text-secondary">Title</h4></label>
                       <input type="text" class="form-control" id="Title" name="Title" placeholder="Title" value="" required>
                       <div class="invalid-feedback">
-                          Please choose a Title.
+                          Please add a title with a minimum length of 2 and a maximum length of 100.
                         </div>
                     </div>
                   </div>
@@ -122,10 +122,6 @@
                       <div class="form-group">
                         <label for="Category"><h4 class="text-secondary">Category</h4></label>
                         <select class="form-control" id="Category" name="Category">
-                          <option>Politics</option>
-                          <option>Science</option>
-                          <option>Food</option>
-                          <option>Programming</option>
                         </select>
                       </div>
                     </div>
@@ -136,7 +132,7 @@
                         <label for="Content"><h4 class="text-secondary">Post Content</h4></label>
                         <textarea class="form-control" id="Content" name="Content" rows="10" required></textarea>
                         <div class="invalid-feedback">
-                          Please add some content to the post.
+                          Please add some content to the post with a minimum length of 10 and a maximum length of 20000.
                         </div>
                       </div>
                     </div>
@@ -145,13 +141,17 @@
                     <div class="col-md-8 mb-3">
                        <div class="form-group">
                         <label for="ImageUrl"><h4 class="text-secondary">Image</h4></label>
-                        <input type="file" class="form-control-file" id="ImageUrl" name="ImageUrl">
-                        <div class="invalid-feedback">
-                          Please add a valid image file.
+                        <input type="file" class="form-control-file" id="ImageUrl" name="ImageUrl" accept="image/png, image/gif, image/jpeg">
+                        <div class="text-danger" id="file-feedback" hidden>
+                            Please add a valid image file of the .png, .jpg or .gif extention. The file may not be larger than 2 MB.
                         </div>
                       </div>
                     </div>
                   </div>
+                  <div class='form-group'>
+                          <input type='hidden' class='form-control hidden' id='error' name='error' value="-">
+                          <div class='invalid-feedback'>Sorry, we couldn't add your comment to our database. It seems something went wrong</div>
+                    </div>
                 </fieldset>
                 <br>
               <button class="btn btn-primary" type="submit">Create Post</button>
@@ -168,6 +168,7 @@
       <p>&copy; Tijl Muys, EhB - 2017-2018</p>
     </footer>
     <!-- script -->
+    <script src="js/formValidation.js"></script>
     <script src="js/createpost.js"></script>
   </body>
 </html>

@@ -138,62 +138,39 @@
         </div>
 
         <!-- Sidebar Widgets Column -->
-        <div class="col-md-4">
-
-          <!-- Search Widget -->
+        <div class="col-md-4" id="affix">
+        
+         <!-- Featured Widget -->
           <div class="card my-4">
-            <h5 class="card-header">Search</h5>
+            <h4 class="card-header">Popular in this Category</h4>
             <div class="card-body">
-              <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search for...">
-                <span class="input-group-btn">
-                  <button class="btn btn-secondary" type="button">Go!</button>
-                </span>
-              </div>
+                <ul class="list-unstyled mb-0 featured-list">
+                 </ul>
+                </div>
             </div>
-          </div>
-
+        
+          <hr />
+         
           <!-- Categories Widget -->
           <div class="card my-4">
-            <h5 class="card-header">Categories</h5>
+            <h4 class="card-header">Categories</h4>
             <div class="card-body">
-              <div class="row">
-                <div class="col-lg-6">
-                  <ul class="list-unstyled mb-0">
-                    <li>
-                      <a href="#">Web Design</a>
-                    </li>
-                    <li>
-                      <a href="#">HTML</a>
-                    </li>
-                    <li>
-                      <a href="#">Freebies</a>
-                    </li>
-                  </ul>
+                <ul class="list-unstyled mb-0 categories-list">
+                    
+                 </ul>
                 </div>
-                <div class="col-lg-6">
-                  <ul class="list-unstyled mb-0">
-                    <li>
-                      <a href="#">JavaScript</a>
-                    </li>
-                    <li>
-                      <a href="#">CSS</a>
-                    </li>
-                    <li>
-                      <a href="#">Tutorials</a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
             </div>
-          </div>
-
-          <!-- Side Widget -->
+        
+          <hr />
+          <!-- Archive Widget -->
           <div class="card my-4">
+            <h4 class="card-header">Archive</h4>
             <div class="card-body">
-              <a href="blogposts.php"><button type="button" class="btn btn-link">Go Back</button></a>
+                <ul class="list-unstyled mb-0 archive-list">
+                    
+                 </ul>
+                </div>
             </div>
-          </div>
 
         </div>
 
@@ -202,6 +179,8 @@
 
     </div>
     <!-- /.container -->
+    <script src="js/blogpostsPaginationFilter.js"></script>
+    <script src="js/blogPostSidebars.js"></script>
     <script src="js/blogpostsDetailPage.js"></script>
     
     

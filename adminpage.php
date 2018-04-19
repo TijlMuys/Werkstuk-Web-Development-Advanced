@@ -13,7 +13,7 @@
         //check if user is admin, if not redirect
         if($loggedInUser->IsAdmin != 1)
         {
-            header('Location: home.php');
+            header('Location: loginpage.php');
             exit();
         }
         
@@ -44,7 +44,7 @@
     <link rel="stylesheet" type="text/css" href="css/layout.css">
   </head>
 
-  <body>
+  <body id="postsheader">
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="site-navbar">
       <div class="container">
@@ -118,7 +118,6 @@
                 <table class="table table-hover">
                   <thead>
                     <tr>
-                      <th>#</th>
                       <th>Id</th>
                       <th>Title</th>
                       <th>User</th>
@@ -129,132 +128,23 @@
                       <th>Delete</th>
                     </tr>
                   </thead>
-                  <tbody id="myTable">
-                    <tr>
-                      <td>1</td>
-                     <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td><a class="btn btn-info"><span class="text-white">View</span></a></td>
-                      <td><a class="btn btn-danger"><span class="text-white">Delete</span></a></td>
-                    </tr>
-                    <tr>
-                      <td>2</td>
-                    <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td><a class="btn btn-info"><span class="text-white">View</span></a></td>
-                      <td><a class="btn btn-danger"><span class="text-white">Delete</span></a></td>
-                    </tr>
-                    <tr>
-                      <td>3</td>
-                     <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td><a class="btn btn-info"><span class="text-white">View</span></a></td>
-                      <td><a class="btn btn-danger"><span class="text-white">Delete</span></a></td>
-                    </tr>
-                    <tr>
-                      <td>4</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td><a class="btn btn-info"><span class="text-white">View</span></a></td>
-                      <td><a class="btn btn-danger"><span class="text-white">Delete</span></a></td>
-                    </tr>
-                    <tr class="success">
-                      <td>5</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td><a class="btn btn-info"><span class="text-white">View</span></a></td>
-                      <td><a class="btn btn-danger"><span class="text-white">Delete</span></a></td>
-                    </tr>
-                    <tr>
-                      <td>6</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td><a class="btn btn-info"><span class="text-white">View</span></a></td>
-                      <td><a class="btn btn-danger"><span class="text-white">Delete</span></a></td>
-                    </tr>
-                    <tr>
-                      <td>7</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td><a class="btn btn-info"><span class="text-white">View</span></a></td>
-                      <td><a class="btn btn-danger"><span class="text-white">Delete</span></a></td>
-                    </tr>
-                     <tr>
-                      <td>8</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td><a class="btn btn-info"><span class="text-white">View</span></a></td>
-                      <td><a class="btn btn-danger"><span class="text-white">Delete</span></a></td>
-                    </tr>
-                    <tr>
-                      <td>9</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td><a class="btn btn-info"><span class="text-white">View</span></a></td>
-                      <td><a class="btn btn-danger"><span class="text-white">Delete</span></a></td>
-                    </tr>
-                    <tr>
-                      <td>10</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td><a class="btn btn-info"><span class="text-white">View</span></a></td>
-                      <td><a class="btn btn-danger"><span class="text-white">Delete</span></a></td>
-                    </tr>
+                  <tbody id="post-table">
+                   
                   </tbody>
                 </table>   
               </div>
             </div> 
             <!-- Pagination -->
           <nav aria-label="Page navigation example">
-              <ul class="pagination" id="paginationtop">
+              <ul class="pagination" id="paginationpostbar">
                 <li class="page-item">
-                  <a class="page-link page-link-prev" href="#" aria-label="Previous">
+                  <a class="page-link page-link-prev" href="#postsheader" aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
                     <span class="sr-only">Previous</span>
                   </a>
                 </li>
                 <li class="page-item">
-                  <a class="page-link page-link-next" href="#" aria-label="Next">
+                  <a class="page-link page-link-next" href="#postsheader" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                     <span class="sr-only">Next</span>
                   </a>
@@ -263,16 +153,17 @@
             </nav>
         </div>
           <hr>
-          <h2>Add Category</h2>
+          <h2 id="categoriesheader">Categories</h2>
           <br>
+          <h5>Add</h5>
           <!-- form -->
           <div id="form-container">
-              <form class="needs-validation" >
+              <form class="needs-validation" id="category-form">
                  <fieldset id="fieldset">
                  <label for="postTitle"><h4 class="text-secondary">Category</h4></label>
                   <div class="form-row">
                     <div class="col-md-4 mb-3">
-                      <input type="text" class="form-control" id="postTitle" placeholder="Category" value="" required>
+                      <input type="text" class="form-control" id="Id" placeholder="Category" value="" required>
                       <div class="invalid-feedback">
                           Please choose a Category.
                         </div>
@@ -284,16 +175,53 @@
                 </fieldset>
             </form>
           </div>
-      
+          <hr>
+          <h5>Delete</h5>
+          <div class="container">
+            <div class="row">
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>Category</th>
+                      <th>Delete</th>
+                    </tr>
+                  </thead>
+                  <tbody id="cat-table">
+                   
+                  </tbody>
+                </table>   
+              </div>
+            </div> 
+      <!-- Pagination -->
+          <nav aria-label="Page navigation example">
+              <ul class="pagination" id="paginationcatbar">
+                <li class="page-item">
+                  <a class="page-link page-link-prev" href="#categoriesheader" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                    <span class="sr-only">Previous</span>
+                  </a>
+                </li>
+                <li class="page-item">
+                  <a class="page-link page-link-next" href="#categoriesheader" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                    <span class="sr-only">Next</span>
+                  </a>
+                </li>
+              </ul>
+            </nav>
 
         <!-- /Blog Entries Column -->
         </div>
       </div>
     </div>
+    </div>
     <hr />
     <footer class="container">
       <p>&copy; Tijl Muys, EhB - 2017-2018</p>
     </footer>
+    <!-- Script -->
+    <script src="js/admin.js"></script>
   </body>
 </html>
 <!--

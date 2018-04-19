@@ -5,17 +5,20 @@
     include_once("../initialize.php");
     include_once("../database/BlogpostDB.php");
     include_once("../database/CategoryDB.php");
+    include_once("validation.php");
     
     //$_POST["Title"] = "TestTitle";
     //$_POST["Category"] = "Programming";
     //$_POST["Content"] = "This is a testpost";
     //$_POST["ImageUrl"] = "images/blogpostImages/code1.jpg";
-    
-    //initialize isValid boolean
-    $isValid = true;
-    //initialise imageurl on default value
-    $imageUrl = "images/genericpost.png";
-       
+    //check if user the httprequest was a POST request, otherwise return to homepage
+    if($_SERVER['REQUEST_METHOD'] != 'POST')
+    {
+        header('Location: ../home.php');
+        exit();
+        
+    }
+
     //check if user is logged in, if the case convert data to the loggedInUser variable, else redirect to loginpage
     if(isset($_SESSION["loggedInUser"]))
     {
@@ -27,14 +30,18 @@
         header('Location: ../loginpage.php');
         exit();
     }
-    
-    file_put_contents('log.txt', "url: ".$_FILES."");
 
-    if(isset($_FILES["ImageUrl"]) && !empty($_FILES["ImageUrl"]))
+    //initialize isValid boolean
+    $isValid = true;
+    //initialise imageurl on default value
+    $imageUrl = "images/genericpost.png";
+    if(validfileVar("ImageUrl"))
     {
-        file_put_contents('log.txt', "data received");
+        file_put_contents('log.txt', "valid image");
         //if a file is uploaded we need to save it on the server and generate a new imageUrl
-        if ($_FILES["ImageUrl"]["type"] == "image/jpeg" || $_FILES["ImageUrl"]["type"] == "image/png")
+        //validate file
+        //if ($_FILES["ImageUrl"]["type"] == "image/jpeg" || $_FILES["ImageUrl"]["type"] == "image/png")
+        if(checkImageFile($_FILES['ImageUrl'], 2000000))
         {
             //get extention of file
             $path = $_FILES['ImageUrl']['name'];
@@ -67,7 +74,7 @@
     //initialise category id on -1
     $categoryId = -1;
     //check is catagory parameter is set and not null
-    if( isset($_POST["Category"]) && !empty($_POST["Category"]))
+    if(validPostVar("Category"))
     {
         //Get all valid categories
         $allCategories = CategoryDB::getAll();
@@ -88,7 +95,7 @@
     //Initialize variables
     $isInserted = false;
     //Check if the parameters exist and are valid (Title, Category and Content)
-    if(isset($_POST["Title"]) && !empty($_POST["Title"]) && isset($_POST["Content"]) && !empty($_POST["Content"]) && $categoryId != -1 && isValid == true)
+    if(validPostVar("Title") && validPostVar("Content") && $categoryId != -1 && isValid == true)
     {
         //create blogpost
         $newPost = new BlogPost(-1, $loggedInUser->Id, $categoryId, $_POST["Title"], -1, $_POST["Content"], $imageUrl);

@@ -1,13 +1,9 @@
 <?php
-    include_once("../data/User.php");
     //start session
     session_start(); 
     include_once("../initialize.php");
-    include_once("../database/CommentDB.php");
+    include_once("../database/CategoryDB.php");
     include_once("validation.php");
-    
-    //$_POST["commentContent"] = "Test";
-    //$_POST["blogpostId"] = 14;
     
     //check if user the httprequest was a POST request, otherwise return to homepage
     if($_SERVER['REQUEST_METHOD'] != 'POST')
@@ -32,13 +28,13 @@
     //Initialize variables
     $isInserted = false;
     //Check if the parameters exist and are valid (content and blogpostid)
-    if(validPostVar("commentContent") && validPostVar("blogpostId"))
+    if(validPostVar("CategoryName"))
     {
          //create comment
-         $newComment = new Comment(-1, $_POST["blogpostId"], $loggedInUser->Id, -1, $_POST["commentContent"]);
+         $newCategory = new Category($_POST["CategoryName"]);
          //add Comment to database
-         $isInserted = CommentDB::insert($newComment);
-         //reload page
+         $isInserted = CommentDB::insert($newCategory);
+         //check if insert was successful
          if($isInserted)
          {
             $data["response"] = "success";

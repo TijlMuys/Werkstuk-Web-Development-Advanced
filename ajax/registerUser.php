@@ -2,18 +2,30 @@
     session_start();
     include_once("../initialize.php");
     include_once("../database/UserDB.php");
+    include_once("validation.php");
+    include_once("encryption.php");
     
     //$_POST["registerMail"] = "marc.coucke@gmail.com";
     //$_POST["registerPass"] = "marcpassword";
     //$_POST["registerUsername"] = "Marc Coucke";
+
+    //check if user the httprequest was a POST request, otherwise return to homepage
+    if($_SERVER['REQUEST_METHOD'] != 'POST')
+    {
+        header('Location: ../home.php');
+        exit();
+        
+    }
+
+
     //initalize parameters
     $isValid = false;
     $isAvailable = true;
     $isInserted = false;
     //Check if the parameters are valid (email, username and password)
-    $emailIsValid = (isset($_POST["registerMail"]) == TRUE && filter_var($_POST["registerMail"], FILTER_VALIDATE_EMAIL) == TRUE);
-    $passIsValid = (isset($_POST["registerPass"]) == TRUE && checkLength($_POST["registerPass"], 8, 30) == TRUE);
-    $nameIsValid = (isset($_POST["registerUsername"]) == TRUE && checkLength($_POST["registerUsername"], 1, 30) == TRUE);
+    $emailIsValid = (validPostVar("registerMail") && validateEmail($_POST["registerMail"]));
+    $passIsValid = (validPostVar("registerPass") && checkStringLength($_POST["registerPass"], 8, 30));
+    $nameIsValid = (validPostVar("registerUsername") && checkStringLength($_POST["registerUsername"], 1, 30));
     $isValid = ($emailIsValid && $passIsValid && $nameIsValid);
         
     //proceed
@@ -74,17 +86,6 @@
         $data["loggedInUser"] = "invalid";
         $encodeddata = json_encode($data);
         echo($encodeddata);
-    }
-
-    //encryption and decryption functions 
-    function encrypt($plain, $key) 
-    { 
-         return openssl_encrypt($crypted,"AES-128-ECB", $key); 
-    } 
-
-    function decrypt($crypted, $key) 
-    { 
-        return openssl_decrypt($crypted,"AES-128-ECB", $key);
     }
 
     //Function to check password length

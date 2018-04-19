@@ -15,7 +15,7 @@
         public static function getAll()
         {
             //Prepare query string
-            $query = "SELECT * FROM CATEGORIES";
+            $query = "SELECT * FROM CATEGORIES ORDER BY CategoryName";
             
             //Execute query
             $conn = self::getConnection();
@@ -86,6 +86,13 @@
         {
             $querystring = "DELETE FROM CATEGORIES WHERE Id = '?'";
             $parameters = array($category->Id);
+            return self::getConnection()->executeQuery($querystring, $parameters);
+        }
+        
+        public static function deleteById($categoryId)
+        {
+            $querystring = "DELETE FROM CATEGORIES WHERE Id = '?'";
+            $parameters = array($categoryId);
             return self::getConnection()->executeQuery($querystring, $parameters);
         }
         

@@ -36,6 +36,8 @@ $(document).ready(function () {
             console.log(data.blogpostdetail);
             formatDetails(data.blogpostdetail);
             formatComments(data.blogpostdetail);
+            //call upon external function to generate sidebar
+            blogPostDetailSidebar(data.blogpostdetail);
             
         }
     }

@@ -1,6 +1,6 @@
 <?php
     include_once "../data/Comment.php";
-    include_once "DatabaseFactory.php";
+    include_once("../database/DatabaseFactory.php");
 
     //Class that contains CRUD methods for Comments, does not contain any data, only static methods
     class CommentDB
@@ -131,5 +131,8 @@
             );
         }
     }
-
+/*
+Derycke, M. PHP & MySql tutorial, https://ehb.instructure.com/courses/690/pages/php-and-mysql-tutorial?module_item_id=20891.
+Geraadpleegd op 2 april 2018
+*/
 ?>

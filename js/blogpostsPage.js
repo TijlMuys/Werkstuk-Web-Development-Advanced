@@ -93,7 +93,7 @@ $(document).ready(function () {
             var blogpostContent = $('<p>', {class: 'card-text'});
             //get condensed article with only the first 100 words //slice first 100 on spaces and join them again
             var blopostTextCondensed = $rawData["Content"].split(' ').slice(0,100).join(' ');
-            blogpostContent.text(blopostTextCondensed + " ...");
+            blogpostContent.html(blopostTextCondensed + " ...");
             //add opacity gradient (if supported)
             blogpostContent.css({"opacity":"0.75"});
             //Append to blogpost
@@ -112,7 +112,7 @@ $(document).ready(function () {
         //append to outerdiv
         outerdiv.append(blogpostfooter);
         
-        //add EventListeners for doubleclicking and hovering
+        //add EventListeners for clicking
         outerdiv.on("click", function() {
             window.location.href= "blogpostdetail.php?Id=" + $rawData["Id"];
         });

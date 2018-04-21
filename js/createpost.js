@@ -45,8 +45,6 @@ $(document).ready(function () {
             {
                formData.append('ImageUrl', document.getElementById("ImageUrl").files[0], document.getElementById("ImageUrl").files[0].name); 
             }
-
-            console.log(formData);
         
             //sent ajax request for user validation
             $.ajax({
@@ -79,12 +77,9 @@ $(document).ready(function () {
     //Ajax Response function
     function postSuccess(dataRes)
     {
-        console.log(dataRes);
         if(dataRes.response != "insertError" && dataRes.response != "invalidError")
         {
-            console.log(dataRes.response);
-            //reload page
-            console.log("success");
+            //redirect to postdetail page
             window.location.replace("blogpostdetail.php?Id=" + dataRes.response["Id"] + "");
         }
         else

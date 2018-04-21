@@ -104,4 +104,8 @@
             return $results;
         }
     }
+/*
+Derycke, M. PHP & MySql tutorial, https://ehb.instructure.com/courses/690/pages/php-and-mysql-tutorial?module_item_id=20891.
+Geraadpleegd op 2 april 2018
+*/
 ?>

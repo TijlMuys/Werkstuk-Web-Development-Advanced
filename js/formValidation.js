@@ -17,29 +17,6 @@ function validatePassword(passwordInputTag)
         return false;
     }
 }
-    
-
-//fucntion that validates the length of a string
-function validateStringLength(InputTag, minLength, maxLength)
-{
-    //Create regularexpression with minLength and maxlength
-    var lengthRegexPattern = new RegExp("^.{" + minLength + "," + maxLength + "}$");
-    //test if username matches the regular expression (length needs to be between 1 and 30 characters)
-    if(lengthRegexPattern.test(InputTag.val()))
-    {
-        //add class to indicate that the input field is valid and remove the invalid-class
-        InputTag.removeClass("is-invalid");
-        InputTag.addClass("is-valid");
-        return true;
-    }
-    else
-    {
-        //add class to indicate that the input field is invalid and remove the valid-class
-        InputTag.removeClass("is-valid");
-        InputTag.addClass("is-invalid");
-        return false;
-    }
-}
 
 //function that validates email addresses with regular expression
 function validateEmail(emailInputTag)
@@ -59,6 +36,26 @@ function validateEmail(emailInputTag)
         emailInputTag.addClass("is-invalid");
         return false;
     }
+}   
+
+//fucntion that validates the length of a string
+function validateStringLength(InputTag, minLength, maxLength)
+{
+    //test if string matches has the proper length
+    if(InputTag.val().length >= minLength && InputTag.val().length <= maxLength)
+    {
+        //add class to indicate that the input field is valid and remove the invalid-class
+        InputTag.removeClass("is-invalid");
+        InputTag.addClass("is-valid");
+        return true;
+    }
+    else
+    {
+        //add class to indicate that the input field is invalid and remove the valid-class
+        InputTag.removeClass("is-valid");
+        InputTag.addClass("is-invalid");
+        return false;
+    }
 }
 
 //function that checks if the fileupload is valid
@@ -68,7 +65,6 @@ function validateFile(file, maxsize)
     //check if only max 1 file is uploaded
     if(file.prop("files").length > 1)
     {
-        console.log('invalid too many files');
         //add class to indicate that the input field is invalid and remove the oposite class
         file.removeClass("is-valid");
         file.addClass("is-invalid");
@@ -77,7 +73,6 @@ function validateFile(file, maxsize)
     //if no file return true
     if(file.prop("files").length == 0)
     {
-        console.log('valid no image');
         //add class to indicate that the input field is valid and remove the oposite class
         file.removeClass("is-invalid");
         file.addClass("is-valid");
@@ -93,7 +88,6 @@ function validateFile(file, maxsize)
     //if filesize if greater than 2 MB return false
     if(currentSize > maxsize)
     {
-        console.log('invalidsize');
         //add class to indicate that the input field is invalid and remove the oposite class
         file.removeClass("is-valid");
         file.addClass("is-invalid");
@@ -110,7 +104,6 @@ function validateFile(file, maxsize)
         //return true if currentextention is in the vaildextentions array
         if(validExtensions[i] == currentExtention)
         {
-            console.log('validext');
            //add class to indicate that the input field is valid and remove the oposite class
             file.removeClass("is-invalid");
             file.addClass("is-valid");
@@ -119,7 +112,6 @@ function validateFile(file, maxsize)
     }
     //if invalid return false
     //add class to indicate that the input field is invalid and remove the oposite class
-    console.log('invalidext');
     file.removeClass("is-valid");
     file.addClass("is-invalid");
     //resolve bootstrap bug with showing invalid feedback after input type=file tag

@@ -3,7 +3,7 @@
    //encryption and decryption functions 
     function encrypt($plain, $key) 
     { 
-         return openssl_encrypt($crypted,"AES-128-ECB", $key); 
+         return openssl_encrypt($plain,"AES-128-ECB", $key); 
     } 
 
     function decrypt($crypted, $key) 

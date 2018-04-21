@@ -6,9 +6,6 @@
     include_once("../database/CommentDB.php");
     include_once("validation.php");
     
-    //$_POST["commentContent"] = "Test";
-    //$_POST["blogpostId"] = 14;
-    
     //check if user the httprequest was a POST request, otherwise return to homepage
     if($_SERVER['REQUEST_METHOD'] != 'POST')
     {
@@ -32,7 +29,7 @@
     //Initialize variables
     $isInserted = false;
     //Check if the parameters exist and are valid (content and blogpostid)
-    if(validPostVar("commentContent") && validPostVar("blogpostId"))
+    if(validPostVar("commentContent") && validPostVar("blogpostId") && checkStringLength($_POST["commentContent"], 3, 1000))
     {
          //create comment
          $newComment = new Comment(-1, $_POST["blogpostId"], $loggedInUser->Id, -1, $_POST["commentContent"]);

@@ -1,5 +1,5 @@
 <?php
-    //CONTAINS Validation functions
+    //this file CONTAINS Validation functions
 
     //function to check if parameter is set and not empty
     function validPostVar($postVarName) 

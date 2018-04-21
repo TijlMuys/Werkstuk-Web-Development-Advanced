@@ -2,11 +2,9 @@ $(document).ready(function () {
     //Get id from url
         //get the url parameters for the blogpostId
         var IdUrlParam = getUrlParams();
-        console.log(IdUrlParam);
         //if there is a Id parameter, proceed
         if(typeof IdUrlParam["Id"] !== 'undefined')
         {
-            console.log({Id:IdUrlParam["Id"]});
             //extract Id from params array
             //Send ajax request to get all posts from server
             $.ajax({
@@ -28,12 +26,10 @@ $(document).ready(function () {
     //Success function of AJAX request for all blogposts
     function getAllAjaxSuccess(data)
     {
-        console.log(data);
-        
         //Check if there is any data received, if the case construct page
         if(data.blogpostdetail) 
         {
-            console.log(data.blogpostdetail);
+            //format data
             formatDetails(data.blogpostdetail);
             formatComments(data.blogpostdetail);
             //call upon external function to generate sidebar
@@ -58,7 +54,7 @@ $(document).ready(function () {
         //create tag that contains author-info and category
         var subheadertag = $('<p>', {class: 'lead'});
         //set text of author and category
-        subheadertag.html("by <span class='text-info'>" + data["Username"] + "</span> - <span class='text-secondary'>" + data["CategoryName"] + "</span>");
+        subheadertag.html("by <span class='text-info'>" + data["Username"] + "</span> - <span class='text-secondary'>" + data["CategoryName"] + "</span><br><small class='text-muted font-weight-light'><i>Posted on " + data["Date"] + "</i></small>");
         //Append subheader
         blogDetailContainer.append(subheadertag);
         
@@ -82,7 +78,7 @@ $(document).ready(function () {
         //create textcontent tag
         var textContent =  $('<p>');
         //add textcontent to tag
-        textContent.text(data["Content"]);
+        textContent.html(data["Content"]);
         //append textcontent
         blogDetailContainer.append(textContent);
         
@@ -163,10 +159,6 @@ $(document).ready(function () {
     $("#commentForm").on('submit', function(e){
         //prevent default behaviour
         e.preventDefault();
-        console.log($("#commentForm").attr("action"));
-        console.log($("#commentContent").val());
-        console.log($("#blogpostId").val());
-        console.log($("#commentForm").serialize());
         //proceed with ajax call if both field are valid
         if(validateCommentContent($("#commentContent")) == true)
         {
@@ -194,8 +186,8 @@ $(document).ready(function () {
     //validate commentContent
     function validateCommentContent(commentContentInputTag)
     {
-        //test if username matches the regular expression (length need to between 1 and 30 characters)
-        if(commentContentInputTag.val().length > 3 && commentContentInputTag.val().length < 1000)
+        //test if comment matches the desired length (length need to between 1 and 1000 characters)
+        if(commentContentInputTag.val().length >= 3 && commentContentInputTag.val().length <= 1000)
         {
             //add class to indicate that the input field is valid and remove the other
             commentContentInputTag.removeClass("is-invalid");
@@ -213,7 +205,6 @@ $(document).ready(function () {
     
     function postCommentSuccess(dataRes)
     {
-        console.log(dataRes.response);
         if(dataRes.response == "success")
         {
             //reload page

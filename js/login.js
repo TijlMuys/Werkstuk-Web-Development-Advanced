@@ -71,7 +71,7 @@ $(document).ready(function () {
         //prevent default behaviour
         e.preventDefault();
         //proceed with ajax call if both field are valid
-        if(validateUsername($("#registerUsername")) == true && validateEmail($("#registerMail")) == true && validatePassword($("#registerPass")) == true)
+        if(validateStringLength($("#registerUsername"), 1, 30) == true && validateEmail($("#registerMail")) == true && validatePassword($("#registerPass")) == true)
         {
             //sent ajax request for user validation
             $.ajax({
@@ -144,65 +144,6 @@ $(document).ready(function () {
             //Redirect to home page
             $(location).attr('href', 'home.php')
         }   
-    }
-    
-    
-    //function that validates email addresses with regular expression
-    function validateEmail(emailInputTag)
-    {
-        //test if email matches the regular expression (needs to contain both a @ and a .)
-        if(/\S+@\S+\.\S+/.test(emailInputTag.val()))
-        {
-            //add class to indicate that the input field is valid and remove the other
-            emailInputTag.removeClass("is-invalid");
-            emailInputTag.addClass("is-valid");
-            return true;
-        }
-        else
-        {
-            //add class to indicate that the input field is invalid and remove the other
-            emailInputTag.removeClass("is-valid");
-            emailInputTag.addClass("is-invalid");
-            return false;
-        }
-    }
-    
-    function validatePassword(passwordInputTag)
-    {
-        //test if password matches the regular expression (length need to between 8 and 30 characters)
-        if(/^\S{8,30}$/.test(passwordInputTag.val()))
-        {
-            //add class to indicate that the input field is valid and remove the other
-            passwordInputTag.removeClass("is-invalid");
-            passwordInputTag.addClass("is-valid");
-            return true;
-        }
-        else
-        {
-            //add class to indicate that the input field is invalid and remove the other
-            passwordInputTag.removeClass("is-valid");
-            passwordInputTag.addClass("is-invalid");
-            return false;
-        }
-    }
-    
-    function validateUsername(usernameInputTag)
-    {
-        //test if username matches the regular expression (length need to between 1 and 30 characters)
-        if(/^.{1,30}$/.test(usernameInputTag.val()))
-        {
-            //add class to indicate that the input field is valid and remove the other
-            usernameInputTag.removeClass("is-invalid");
-            usernameInputTag.addClass("is-valid");
-            return true;
-        }
-        else
-        {
-            //add class to indicate that the input field is invalid and remove the other
-            usernameInputTag.removeClass("is-valid");
-            usernameInputTag.addClass("is-invalid");
-            return false;
-        }
     }
     
 });

@@ -1,9 +1,13 @@
 <?php
-    //include user class
-    include_once("data/User.php");
+    //include initilize file
+    include_once("initialize.php");
+    //include user classes
+    include_once("database/UserDB.php");
+    //include encryption methods
+    include_once("ajax/encryption.php");
     //start session
     session_start();   
-    
+   
     //initiate current loggedinUser on false
     $loggedInUser = false;
     //check if user is logged in, if the case convert data to the logginInuser variable
@@ -11,6 +15,27 @@
     {
         $loggedInUser = $_SESSION["loggedInUser"];
         
+    }
+    else
+    {
+         //check if there is a cookie to login user
+        if(isset($_COOKIE["usermail"]) && isset($_COOKIE["password"]))
+        {
+            //if present, attempt login of user with cookie data
+            $users = UserDB::getAll();
+            //initiate variable that will hold the logged in user (when it exists)
+            $loggedInUser = false;
+            //iterate over all users
+            for($i = 0; $i < count($users); $i++)
+            {
+                //check if username and password match, if the case set logginUser and break loop 
+                if($users[$i]->Password == encrypt(decrypt($_COOKIE["password"], $_COOKIE["usermail"]), $_COOKIE["usermail"]) && $users[$i]->Email == $_COOKIE["usermail"])
+                {
+                    $loggedInUser = $users[$i];
+                    break;
+                }
+            }
+        }
     }
 ?>
 <!doctype html>
@@ -48,9 +73,6 @@
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="aboutpage.php">About</a>
-            </li>
-            <li class="nav-item">
               <a class="nav-link" href="blogposts.php">Blogposts</a>
             </li>
             <?php
@@ -86,7 +108,7 @@
         </div>
       </div>
     </nav>
-
+    
     <!-- Page Content -->
     <div class="container" id="start-content">
       <!-- Main jumbotron for a primary marketing message or call to action -->
@@ -107,7 +129,7 @@
       </div>
         <div class="container">
         <!-- Example row of columns -->
-        <div class="p-3 mb-2 bg-dark text-light rounded"><h1 class="text-light">Featured Posts</h1></div>
+        <div class="p-3 mb-2 bg-dark text-light rounded"><h1 class="text-light">Featured this month</h1></div>
         <div class="row" id="featuredContainer">
           
         </div>

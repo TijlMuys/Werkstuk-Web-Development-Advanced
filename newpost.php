@@ -1,8 +1,12 @@
 <?php
-    //include user class
-    include_once("data/User.php");
+    //include initilize file
+    include_once("initialize.php");
+    //include user classes
+    include_once("database/UserDB.php");
+    //include encryption methods
+    include_once("ajax/encryption.php");
     //start session
-    session_start();   
+    session_start();    
     
     //initiate current loggedinUser on false
     $loggedInUser = false;
@@ -14,8 +18,31 @@
     }
     else
     {
-        header('Location: loginpage.php');
-        exit();
+        //check if you can log in with cookie data
+        if(isset($_COOKIE["usermail"]) && isset($_COOKIE["password"]))
+        {
+            //if present, attempt login of user with cookie data
+            $users = UserDB::getAll();
+            //initiate variable that will hold the logged in user (when it exists)
+            $loggedInUser = false;
+            //iterate over all users
+            for($i = 0; $i < count($users); $i++)
+            {
+                //check if username and password match, if the case set logginUser and break loop 
+                if($users[$i]->Password == encrypt(decrypt($_COOKIE["password"], $_COOKIE["usermail"]), $_COOKIE["usermail"]) && $users[$i]->Email == $_COOKIE["usermail"])
+                {
+                    $loggedInUser = $users[$i];
+                    break;
+                }
+            }
+        }
+        else
+        {
+            //redirect to loginpage
+            header('Location: loginpage.php');
+            exit();
+        }
+        
     }
 ?>
 <!doctype html>
@@ -50,9 +77,6 @@
           <ul class="navbar-nav ml-auto">
             <li class="nav-item">
               <a class="nav-link" href="home.php">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="aboutpage.php">About</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="blogposts.php">Blogposts</a>

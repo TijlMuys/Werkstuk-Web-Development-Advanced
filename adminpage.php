@@ -1,8 +1,12 @@
 <?php
-    //include user class
-    include_once("data/User.php");
+    //include initilize file
+    include_once("initialize.php");
+    //include user classes
+    include_once("database/UserDB.php");
+    //include encryption methods
+    include_once("ajax/encryption.php");
     //start session
-    session_start();   
+    session_start(); 
     
     //initiate current loggedinUser on false
     $loggedInUser = false;
@@ -20,8 +24,31 @@
     }
     else
     {
-        header('Location: loginpage.php');
-        exit();
+        //check if you can log in with cookie data
+        if(isset($_COOKIE["usermail"]) && isset($_COOKIE["password"]))
+        {
+            //if present, attempt login of user with cookie data
+            $users = UserDB::getAll();
+            //initiate variable that will hold the logged in user (when it exists)
+            $loggedInUser = false;
+            //iterate over all users
+            for($i = 0; $i < count($users); $i++)
+            {
+                //check if username and password match, if the case set logginUser and break loop 
+                if($users[$i]->Password == encrypt(decrypt($_COOKIE["password"], $_COOKIE["usermail"]), $_COOKIE["usermail"]) && $users[$i]->Email == $_COOKIE["usermail"])
+                {
+                    $loggedInUser = $users[$i];
+                    break;
+                }
+            }
+        }
+        else
+        {
+            //redirect to loginpage
+            header('Location: loginpage.php');
+            exit();
+        }
+        
     }
 ?>
 <!doctype html>
@@ -56,9 +83,6 @@
           <ul class="navbar-nav ml-auto">
             <li class="nav-item">
               <a class="nav-link" href="home.php">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="aboutpage.php">About</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="blogposts.php">Blogposts</a>
@@ -158,18 +182,22 @@
           <h5>Add</h5>
           <!-- form -->
           <div id="form-container">
-              <form class="needs-validation" id="category-form">
+              <form class="needs-validation" id="categoryForm" method="post" action="ajax/addCategory.php">
                  <fieldset id="fieldset">
-                 <label for="postTitle"><h4 class="text-secondary">Category</h4></label>
+                 <label for="CategoryName"><h4 class="text-secondary">Category</h4></label>
                   <div class="form-row">
                     <div class="col-md-4 mb-3">
-                      <input type="text" class="form-control" id="Id" placeholder="Category" value="" required>
+                      <input type="text" class="form-control" id="CategoryName" name="CategoryName" placeholder="Category" value="" required>
                       <div class="invalid-feedback">
-                          Please choose a Category.
+                          Please give a Category name between 3 and 30 characters
                         </div>
                     </div>
+                    <div class='form-group'>
+                          <input type='hidden' class='form-control hidden' id='blogpostId' name='blogpostId' value=".$blogpostId.">
+                          <div class='invalid-feedback'>Sorry, we couldn't add the category to the database. It seems something went wrong</div>
+                    </div>
                     <div class="col-md-3 mb-3">
-                       <button class="btn btn-primary" type="submit">Add Category</button>
+                       <input type=submit class="btn btn-primary" type="submit" value="Add Category">
                     </div>
                   </div>
                 </fieldset>
@@ -190,9 +218,10 @@
                   <tbody id="cat-table">
                    
                   </tbody>
-                </table>   
+                </table>
               </div>
-            </div> 
+              <p><small class="text-danger">Important: Deleting a category will also delete all underlying posts.</small></p>
+            </div>
       <!-- Pagination -->
           <nav aria-label="Page navigation example">
               <ul class="pagination" id="paginationcatbar">
@@ -221,6 +250,7 @@
       <p>&copy; Tijl Muys, EhB - 2017-2018</p>
     </footer>
     <!-- Script -->
+    <script src="js/formValidation.js"></script>
     <script src="js/admin.js"></script>
   </body>
 </html>

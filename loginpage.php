@@ -1,8 +1,12 @@
 <?php
-    //include user class
-    include_once("data/User.php");
+    //include initilize file
+    include_once("initialize.php");
+    //include user classes
+    include_once("database/UserDB.php");
+    //include encryption methods
+    include_once("ajax/encryption.php");
     //start session
-    session_start();   
+    session_start();
     
     //initiate current loggedinUser on false
     $loggedInUser = false;
@@ -11,6 +15,27 @@
     {
         $loggedInUser = $_SESSION["loggedInUser"];
         
+    }
+    else
+    {
+         //check if there is a cookie to login user
+        if(isset($_COOKIE["usermail"]) && isset($_COOKIE["password"]))
+        {
+            //if present, attempt login of user with cookie data
+            $users = UserDB::getAll();
+            //initiate variable that will hold the logged in user (when it exists)
+            $loggedInUser = false;
+            //iterate over all users
+            for($i = 0; $i < count($users); $i++)
+            {
+                //check if username and password match, if the case set logginUser and break loop 
+                if($users[$i]->Password == encrypt(decrypt($_COOKIE["password"], $_COOKIE["usermail"]), $_COOKIE["usermail"]) && $users[$i]->Email == $_COOKIE["usermail"])
+                {
+                    $loggedInUser = $users[$i];
+                    break;
+                }
+            }
+        }
     }
 ?>
 <!doctype html>
@@ -47,9 +72,6 @@
           <ul class="navbar-nav ml-auto">
             <li class="nav-item">
               <a class="nav-link" href="home.php">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="aboutpage.php">About</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="blogposts.php">Blogposts</a>
@@ -118,6 +140,12 @@
                       <input type="password" id="loginPass" name="loginPass" class="form-control" placeholder="Password" required>
                       <div class="invalid-feedback">The password needs to be between 8 and 30 characters long</div>
                   </div>
+                  <div class="form-check">
+                      <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" id="stayLoggedIn" name="stayLoggedIn" value="true">
+                        Remember me
+                      </label>
+                  </div>
                   <div class="form-group" id="loginHiddenGroup">
                       <input type="hidden" class="form-control hidden">
                       <div class="invalid-feedback">Username or password is incorrect or could not be verified in the database</div>
@@ -172,6 +200,7 @@
             </div>
         </div>
     </div>
+    <script src="js/formValidation.js"></script>
     <script src="js/login.js"></script>
   </body>
 </html>

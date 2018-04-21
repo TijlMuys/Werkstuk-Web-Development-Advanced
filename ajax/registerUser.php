@@ -4,10 +4,6 @@
     include_once("../database/UserDB.php");
     include_once("validation.php");
     include_once("encryption.php");
-    
-    //$_POST["registerMail"] = "marc.coucke@gmail.com";
-    //$_POST["registerPass"] = "marcpassword";
-    //$_POST["registerUsername"] = "Marc Coucke";
 
     //check if user the httprequest was a POST request, otherwise return to homepage
     if($_SERVER['REQUEST_METHOD'] != 'POST')
@@ -28,7 +24,7 @@
     $nameIsValid = (validPostVar("registerUsername") && checkStringLength($_POST["registerUsername"], 1, 30));
     $isValid = ($emailIsValid && $passIsValid && $nameIsValid);
         
-    //proceed
+    //proceed if valid
      if($isValid == TRUE)
      {
         //Get all users from the database
@@ -54,7 +50,7 @@
         else
         {
             //If everything is in order create new user
-            $newUser = new User(-1, $_POST["registerUsername"], encrypt($_POST["registerMail"], $_POST["registerPass"]), $_POST["registerMail"]);
+            $newUser = new User(-1, $_POST["registerUsername"], encrypt($_POST["registerPass"], $_POST["registerMail"]), $_POST["registerMail"]);
             //insert user
             $isInserted = UserDB::insert($newUser);
             //if insert successful log user in

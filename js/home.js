@@ -15,24 +15,19 @@ $(document).ready(function () {
     //Success function of AJAX request for all blogposts
     function getAllAjaxSuccess(data)
     {
-        console.log(data);
         //Check if there is any data received
         if(data.blogposts) 
         {
             generatePopularPosts(data);
         }
     }
-    /*
-    <div class="col-md-4">
-            <h2 class="text-secondary">Heading</h2>
-            <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-            <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
-          </div>
-        */
     
     //Generates popular section on homepage
     function generatePopularPosts(data)
     {
+        //get current date
+        var currentDate = new Date();
+        //initialize arrays
         var usedArray = [];
         var allIds = [];
         //Call function to get information of popular posts
@@ -40,14 +35,13 @@ $(document).ready(function () {
         //get divcontainer for popular posts on homepage
         var popularContainer = $("#popularContainer");
         var featuredContainer = $("#featuredContainer");
-        console.log(popularContainer);
         //iterate over top3postinfo
         for (i = 0; i < top3Posts.length; i++) 
         {
             //iterate over all posts
             for (j = 0; j < data.blogposts.length; j++)
             {
-                //proceed to add popular itemif ids match
+                //proceed to add popular item if ids match
                 if(top3Posts[i]["Id"] == data.blogposts[j]["Id"])
                 {
                     //generate popular listitem
@@ -55,8 +49,10 @@ $(document).ready(function () {
                     //add id to used array
                     usedArray.push(data.blogposts[j]["Id"]);
                 }
-                //add id to allids array if not already in there
-                if(allIds.indexOf(data.blogposts[j]["Id"]) == -1)
+                //get date of currentpost
+                var postDate = new Date(data.blogposts[j]["Date"]);
+                //add id to allids array if not already in there and if the post is of the current month and year
+                if(allIds.indexOf(data.blogposts[j]["Id"]) == -1 && postDate.getYear() == currentDate.getYear() && postDate.getMonth() == currentDate.getMonth())
                 {
                     allIds.push(data.blogposts[j]["Id"]);
                 }
@@ -85,7 +81,6 @@ $(document).ready(function () {
             //check if currentRandomId is not already in the popular section (usedArray), only proceed when this is the case
             if(usedArray.indexOf(currentRandomId) == -1)
             {
-                    console.log(currentRandomId);
                     //Add featured article
                     addlistItem(data, featuredContainer, currentRandomKey);
                     //add id to used list
@@ -94,12 +89,7 @@ $(document).ready(function () {
                     featuredCount++;
             }
             
-            
         }
-        
-        
-        console.log(usedArray);
-        console.log(allIds);
     }
     
     function getInfoPopularPosts(data)
@@ -152,6 +142,12 @@ $(document).ready(function () {
     {
         //make new listitem
         var newListitem = $('<div>', {class: 'col-md-4'});
+        //add tooltip
+        newListitem.attr('title', "This post has " + data.blogposts[id]["Comments"].length + " comments");
+        //add eventlistenr for clicking
+        newListitem.on("click", function() {
+            window.location.href= "blogpostdetail.php?Id=" + data.blogposts[id]["Id"];
+        });
         //make div with background
         var newListItemBg = $('<div>', {class: 'pop-home-div'});
         //change url of image

@@ -14,7 +14,6 @@ function blogPostDetailSidebar(currentPost) {
     //Success function of AJAX request for all data
     function getAllAjaxDetailSuccess(data)
     {
-        console.log(data);
         //call upon the sidebar function
         detailSidebar(data, currentPost);
     }
@@ -67,8 +66,6 @@ function generatePopularWidget(data)
 
 function generateFeaturedWidget(data, currentPost)
 {
-    console.log("Relevant");
-    console.log(data);
     //initialize variables
     var currentCategory = currentPost["CategoryName"];
     var currentId = currentPost["Id"];
@@ -85,10 +82,9 @@ function generateFeaturedWidget(data, currentPost)
         }
     
     }
-    console.log(filteredData);
+   
     //Call function to get information of popular posts
     var top3Posts = getInfoPopularPosts(filteredData);
-    console.log(top3Posts);
     //get popular-list element of sidebar
     var featuredList = $(".featured-list");
     //iterate over top3postinfo
@@ -194,7 +190,6 @@ function generateCategoriesWidget(data, isDetail)
             //check if we are on the blogposts overview page or in a detailed view
             if(isDetail == false)
             {
-                console.log("catclick");
                 //if we are on the overview page call upon the filterOnCategory function
                 filterOnCategory(currentCategory);
             }
@@ -232,7 +227,6 @@ function generateCategoriesWidget(data, isDetail)
             var currentCategory = $(this).text();
             if(isDetail == false)
             {
-                console.log("catclick");
                 //if we are on the overview page call upon the filterOnCategory function
                 filterOnCategory(currentCategory);
             }
@@ -305,7 +299,6 @@ function generateArchiveWidget(data, isDetail)
              e.preventDefault();
              //get category to filter on
              var currentYearMonth = $(this).text();
-             console.log(currentYearMonth);
              //check if we are on the blogposts overview page or in a detailed view
             if(isDetail == false)
             {
@@ -331,12 +324,12 @@ function generateArchiveWidget(data, isDetail)
 function getMonthName(monthNumber)
 {
     //check if valid monthnumber
-    if(monthNumber > 0 && monthNumber < 13)
+    if(monthNumber >= 0 && monthNumber < 12)
     {
         //make Array with month names
         var monthArray = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ];
         //get right name from array
-        var monthName = monthArray[monthNumber-1];
+        var monthName = monthArray[monthNumber];
         //return right name
         return monthName;
     }

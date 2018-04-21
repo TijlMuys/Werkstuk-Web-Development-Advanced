@@ -1,5 +1,4 @@
 $(document).ready(function () {
-    console.log("loaded script");
     //Send ajax request to get all posts from server
     $.ajax({
         url: "ajax/blogpostsLoader.php",
@@ -42,30 +41,55 @@ $(document).ready(function () {
     
     function getAllCategoriesAjaxSuccess(catdata)
     {
-        console.log(catdata);
         //get category table
         var catTable = $("#cat-table");
         //iterate over categories
         for (i = 0; i < catdata.length; i++) 
         { 
-            //Create new tablerow
-            var newcatrow = $('<tr>', {class: 'catrow'});
-            //Create tabledata for category
-            newcatrow.append($('<td>').text(catdata[i]["CategoryName"]));
-            //Create tabledata for remove btn
-            var removetdtag = $('<td>');
-                //add remove button
-                var removebutton = $('<a>', {class: 'btn btn-danger'});
-                //add span
-                removebutton.html("<span class='text-white'>Delete</span>");
-                //append
-                newcatrow.append(removetdtag.append(removebutton));
-            
+            //make new category tablerow
+            var newcatrow = formatCategoryRow(catdata[i]);
             //append newrow to table
             catTable.append(newcatrow);
         } 
         //pagination
-        adminPagination(3, "paginationcatbar", "catrow", "categoriesheader");
+        adminPagination(4, "paginationcatbar", "catrow", "categoriesheader");
+    }
+    
+    function formatCategoryRow(category)
+    {
+        //Create new tablerow
+        var newcatrow = $('<tr>', {class: 'catrow'});
+        //Create tabledata for category
+        newcatrow.append($('<td>').text(category["CategoryName"]));
+        //Create tabledata for remove btn
+        var removetdtag = $('<td>');
+            //add remove button
+            var removebutton = $('<a>', {class: 'btn btn-danger'});
+            //add span
+            removebutton.html("<span class='text-white'>Delete</span>");
+                //add eventlistener
+                removebutton.on('click', function(e) {
+                //prevent default behaviour
+                e.preventDefault();
+                //ajax call to remove post
+                     $.ajax({
+                        url: "ajax/removeCategory.php",
+                        type: "POST",
+                        dataType: "json",
+                        data: {
+                            'Id' : category["Id"]
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                            console.log(xhr.status);
+                            console.log(thrownError);
+                        },
+                        success: catDeleteSuccess
+                    });
+                });
+            //append
+            newcatrow.append(removetdtag.append(removebutton));
+        //return newrow
+        return newcatrow;
     }
     
     
@@ -128,7 +152,15 @@ $(document).ready(function () {
     
     function postDeleteSuccess(data)
     {
-        console.log(data);
+        if(data.response == "success")
+        {
+            //reload page
+            location.reload();
+        }
+    }
+    
+    function  catDeleteSuccess(data)
+    {
         if(data.response == "success")
         {
             //reload page
@@ -146,7 +178,6 @@ $(document).ready(function () {
         $("."+rowclass+":gt(" + (rowsPerPage - 1) + ")").hide();
         //Determine number of pages (round up)
         var numberOfPages = Math.ceil(numberOfPosts / rowsPerPage);
-        console.log($("#"+barid+"").children().eq(-2));
         //Add the first (required page) to the pagebar
         $("#"+barid+"").children().eq(-2).after("<li class='page-item active page-number'><a class='page-link' href='#"+header+"'>" + 1 + "</a></li>");
         //Add other pages dynamically to pagebar (if there are any additional pages)
@@ -155,8 +186,6 @@ $(document).ready(function () {
             $("#"+barid+"").children().eq(-2).after("<li class='page-item page-number'><a class='page-link' href='#"+header+"'>" + i + "</a></li>");
         }
         //Add click-event to page numbers
-        console.log("#"+barid+" li.page-number");
-        console.log($("#"+barid+" li.page-number"));
         $("#"+barid+"   li.page-number").on("click", function() {
             //Check if cliked page is already active, if not run code
             if ($(this).hasClass("active") == false)
@@ -222,24 +251,25 @@ $(document).ready(function () {
     }
     
     //Add eventlistener to our category form
-    $("#catergory-form").on('submit', function(e){
+    $("#categoryForm").on('submit', function(e){
         //prevent default behaviour
         e.preventDefault();
         //proceed with ajax call if field is valid
-        if(true)
+        if(validateStringLength($("#CategoryName"), 3, 30))
         {
             //sent ajax request for user validation
             $.ajax({
-                url: $("#commentForm").attr("action"),
+                //url: $("#catergory-form").attr("action"),
+                url: $("#categoryForm").attr("action"),
                 type: "POST",
                 dataType: "json",
-                data: $("#catergory-form").serialize(),
+                data: $("#categoryForm").serialize(),
                 error: function (xhr, ajaxOptions, thrownError) {
                     //show that something went wrong
-                    $("#catergory-form").removeClass("is-valid");
-                    $("#catergory-form").addClass('is-invalid');
-                    $("#catergory-form .form-control").removeClass("is-valid");
-                    $("#catergory-form .hidden").addClass('is-invalid');
+                    $("#categoryForm").removeClass("is-valid");
+                    $("#categoryForm").addClass('is-invalid');
+                    $("#categoryForm .form-control").removeClass("is-valid");
+                    $("#categoryForm .hidden").addClass('is-invalid');
                     console.log(xhr.status);
                     console.log(thrownError); 
                 },
@@ -251,7 +281,6 @@ $(document).ready(function () {
     
     function postCategorySuccess(dataRes)
     {
-        console.log(dataRes.response);
         if(dataRes.response == "success")
         {
             //reload page

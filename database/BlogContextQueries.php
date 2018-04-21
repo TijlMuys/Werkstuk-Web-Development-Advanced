@@ -1,6 +1,6 @@
 <?php
     include_once "../data/BlogContext.php";
-    include_once "DatabaseFactory.php";
+    include_once("../database/DatabaseFactory.php");
 
     //This class contains queries to retrieve Blogcontext-objects from the database, since Blogcontext does not correspond with a Database Table, direct DML statements are impossible
     class BlogContextQueries

@@ -7,10 +7,6 @@
     include_once("../database/CategoryDB.php");
     include_once("validation.php");
     
-    //$_POST["Title"] = "TestTitle";
-    //$_POST["Category"] = "Programming";
-    //$_POST["Content"] = "This is a testpost";
-    //$_POST["ImageUrl"] = "images/blogpostImages/code1.jpg";
     //check if user the httprequest was a POST request, otherwise return to homepage
     if($_SERVER['REQUEST_METHOD'] != 'POST')
     {
@@ -97,8 +93,8 @@
     //Check if the parameters exist and are valid (Title, Category and Content)
     if(validPostVar("Title") && validPostVar("Content") && $categoryId != -1 && isValid == true)
     {
-        //create blogpost
-        $newPost = new BlogPost(-1, $loggedInUser->Id, $categoryId, $_POST["Title"], -1, $_POST["Content"], $imageUrl);
+        //create blogpost + use the nl2br() function to convert newlines to <br> tags
+        $newPost = new BlogPost(-1, $loggedInUser->Id, $categoryId, $_POST["Title"], -1,  nl2br($_POST["Content"]), $imageUrl);
         //add Comment to database
         $isInserted = BlogPostDB::insert($newPost);
         //get last inserted Id
